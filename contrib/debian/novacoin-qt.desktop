@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=XP
+Comment=XP P2P Cryptocurrency
+Comment[ru]=XP, P2P криптовалюта
+Comment[fr]=XP, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=XP, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/XP-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/XP80.xpm
+MimeType=x-scheme-handler/XP;
+Categories=Office;

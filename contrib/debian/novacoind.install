@@ -1,0 +1,2 @@
+debian/bin/XPd usr/bin
+src/XPd usr/lib/XP

@@ -1,0 +1,5 @@
+XP-qt usr/bin
+share/pixmaps/XP32.xpm usr/share/pixmaps
+share/pixmaps/XP80.xpm usr/share/pixmaps
+debian/XP-qt.desktop usr/share/applications
+debian/XP-qt.protocol usr/share/kde4/services/

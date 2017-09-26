@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: XP
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# XP_enable (bool): Set to NO by default. Set this variable to YES if you want to enable XP service.
+# XP_config (path): Set to /usr/local/etc/XP.conf by default.
+# XP_user:  The user account XP daemon runs as. It uses 'root' user by default.
+# XP_group: The group account XP daemon runs as. It uses 'wheel' group by default.
+# XP_datadir (str): Default to "/var/db/XP". Base data directory.
+
+. /etc/rc.subr
+
+name=XP
+rcvar=XP_enable
+
+: ${XP_enable:=NO}
+: ${XP_config=/usr/local/etc/XP.conf}
+: ${XP_datadir=/var/db/XP}
+: ${XP_user="root"}
+: ${XP_group="wheel"}
+
+required_files=${XP_config}
+command=/usr/local/bin/XPd
+XP_chdir=${XP_datadir}
+pidfile="${XP_datadir}/XPd.pid"
+stop_cmd=XP_stop
+command_args="-conf=${XP_config} -datadir=${XP_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+XP_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${XP_datadir}
+	[ $? -eq 0 ] && chown -R ${XP_user}:${XP_group} ${XP_datadir}
+}
+
+XP_prestart()
+{
+	if [ ! -d "${XP_datadir}/." ]; then
+		XP_create_datadir || return 1
+	fi
+}
+
+XP_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+XP_stop()
+{
+    XP_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${XP_config} -datadir=${XP_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"
