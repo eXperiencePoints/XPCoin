@@ -10,8 +10,23 @@ cryptographic software written by Eric Young (eay@cryptsoft.com).
 UNIX BUILD NOTES
 ================
 
-To Build
---------
+
+To Build Automatic
+------------------
+
+Linux compile script (includes installing dependencies) (Non-GUI Version)(Deamon)  # Headless Xp
+
+tested working on Ubuntu Server 64bit
+
+wget https://github.com/eXperiencePoints/XPCoin/releases/download/1.0.0/XPd-linux-compile-from-source.sh
+sudo sh ./XPd-linux-compile-from-source.sh
+
+compiled file should be in XPCoin/src/ and is called XPd
+
+----------------------------
+
+To Build Manually
+--------------------
 
 cd src/
 make -f makefile.unix            # Headless XP
