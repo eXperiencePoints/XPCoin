@@ -1,5 +1,6 @@
 #!/bin/bash
 echo "Updating System And Sources"
+sudo add-apt-repository ppa:bitcoin/bitcoin -y
 sudo apt-get update -y -qq
 echo "Installing Git Software"
 sudo apt-get install git -y -qq
@@ -14,7 +15,7 @@ echo "Installing Dependencies - libssql-dev"
 sudo apt-get install libssl-dev -y -qq
 
 echo "Installing Dependencies - libdb4.8++-dev"
-
+sudo apt-get install libdb4.8-dev -y -qq
 sudo apt-get install libdb4.8++-dev -y -qq
 
 echo "Installing Dependencies - libboost-all-dev"
@@ -31,4 +32,4 @@ cd XPCoin/
 cd src/
 make -f makefile.unix 
 
-chmod -x XPd
+chmod -x X
