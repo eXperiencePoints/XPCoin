@@ -43,7 +43,7 @@ echo "Downloading BootStrap"
 sudo apt install unzip -y -qq
 wget https://media.xpcoin.io/files/blockchain/xpcoin-server-bootstrap-latest.zip
 echo "Unzipping Files"
-unzip ./xpcoin-server-bootstrap-latest.zip -d ./XP
+unzip ./xpcoin-server-bootstrap-latest.zip -d ./.XP
 
 else
   echo "XP Compile Finished";
