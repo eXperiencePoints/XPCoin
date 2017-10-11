@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright (c) 2017 Lexicon & XP Dev team
+# Script written by Lexicon
 echo "Updating System And Sources"
 sudo add-apt-repository ppa:bitcoin/bitcoin -y
 sudo apt-get update -y -qq
@@ -33,3 +35,4 @@ cd src/
 make -f makefile.unix 
 
 chmod +x XPd
+
