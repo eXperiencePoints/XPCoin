@@ -32,4 +32,4 @@ cd XPCoin/
 cd src/
 make -f makefile.unix 
 
-chmod -x X
+chmod +x XPd
