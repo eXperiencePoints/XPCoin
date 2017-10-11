@@ -36,3 +36,17 @@ make -f makefile.unix
 
 chmod +x XPd
 
+read -p "Would you like to download and unzip the blockchain?"  CONT
+if [ "$CONT" = "y" ]; then
+echo "Downloading BootStrap"
+
+sudo apt install unzip -y -qq
+wget https://media.xpcoin.io/files/blockchain/xpcoin-server-bootstrap-latest.zip
+echo "Unzipping Files"
+unzip ./xpcoin-server-bootstrap-latest.zip -d ./XP
+
+else
+  echo "XP Compile Finished";
+fi
+
+
