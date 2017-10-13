@@ -22,7 +22,7 @@ sudo apt-get install libdb4.8++-dev -y -qq
 
 echo "Installing Dependencies - libboost-all-dev"
 
-apt-get install libboost-all-dev -y -qq
+sudo apt-get install libboost-all-dev -y -qq
 
 echo "Installing Dependencies - libqrencode-dev"
 
@@ -43,7 +43,7 @@ echo "Downloading BootStrap"
 sudo apt install unzip -y -qq
 wget https://media.xpcoin.io/files/blockchain/xpcoin-server-bootstrap-latest.zip
 echo "Unzipping Files"
-unzip ./xpcoin-server-bootstrap-latest.zip -d ./.XP
+unzip ./xpcoin-server-bootstrap-latest.zip -d ~/.XP
 
 else
   echo "XP Compile Finished";
