@@ -1,6 +1,7 @@
 #include "bitcoinunits.h"
 
 #include <QStringList>
+#include <QLocale>
 
 BitcoinUnits::BitcoinUnits(QObject *parent):
         QAbstractListModel(parent),
@@ -96,7 +97,7 @@ QString BitcoinUnits::format(int unit, qint64 n, bool fPlus, uint8_t nNumberOfZe
     qint64 n_abs = (n > 0 ? n : -n);
     qint64 quotient = n_abs / coin;
     qint64 remainder = n_abs % coin;
-    QString quotient_str = QString::number(quotient);
+    QString quotient_str =  QLocale::system().toString(quotient);
     QString remainder_str = QString::number(remainder).rightJustified(num_decimals, '0');
 
     // Right-trim excess zeros after the decimal point
