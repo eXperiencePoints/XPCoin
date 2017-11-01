@@ -340,8 +340,8 @@ Copyright © 2012-2015 The XP developers</translation>
     </message>
     <message>
         <location filename="../bitcoingui.cpp" line="250"/>
-        <source>&amp;Send coins</source>
-        <translation>&amp;Send coins</translation>
+        <source>&amp;Send XP</source>
+        <translation>&amp;Send XP</translation>
     </message>
     <message>
         <location filename="../bitcoingui.cpp" line="251"/>
@@ -350,8 +350,8 @@ Copyright © 2012-2015 The XP developers</translation>
     </message>
     <message>
         <location filename="../bitcoingui.cpp" line="256"/>
-        <source>&amp;Receive coins</source>
-        <translation>&amp;Receive coins</translation>
+        <source>&amp;Receive XP</source>
+        <translation>&amp;Receive XP</translation>
     </message>
     <message>
         <location filename="../bitcoingui.cpp" line="257"/>
@@ -370,8 +370,8 @@ Copyright © 2012-2015 The XP developers</translation>
     </message>
     <message>
         <location filename="../bitcoingui.cpp" line="268"/>
-        <source>&amp;Minting</source>
-        <translation>&amp;Minting</translation>
+        <source>&amp;XP Boost</source>
+        <translation>&amp;XP Boost</translation>
     </message>
     <message>
         <location filename="../bitcoingui.cpp" line="269"/>
@@ -2227,7 +2227,7 @@ Reduce the number of addresses involved in the address creation.</translation>
     </message>
     <message>
         <location filename="../forms/overviewpage.ui" line="39"/>
-        <source>Balances</source>
+        <source>XP Bank</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2782,8 +2782,8 @@ Reduce the number of addresses involved in the address creation.</translation>
         <location filename="../sendcoinsdialog.cpp" line="225"/>
         <location filename="../sendcoinsdialog.cpp" line="230"/>
         <location filename="../sendcoinsdialog.cpp" line="235"/>
-        <source>Send Coins</source>
-        <translation>Send Coins</translation>
+        <source>Send XP</source>
+        <translation>Send XP</translation>
     </message>
     <message>
         <location filename="../forms/sendcoinsdialog.ui" line="90"/>
@@ -2980,8 +2980,8 @@ Reduce the number of addresses involved in the address creation.</translation>
     </message>
     <message>
         <location filename="../sendcoinsdialog.cpp" line="175"/>
-        <source>Confirm send coins</source>
-        <translation>Confirm send coins</translation>
+        <source>Confirm send XP</source>
+        <translation>Confirm send XP</translation>
     </message>
     <message>
         <location filename="../sendcoinsdialog.cpp" line="176"/>

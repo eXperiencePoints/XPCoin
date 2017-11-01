@@ -336,7 +336,7 @@ Copyright © 2012-2015 The XP developers</source>
     </message>
     <message>
         <location filename="../bitcoingui.cpp" line="250"/>
-        <source>&amp;Send coins</source>
+        <source>&amp;Send XP</source>
         <translation>Отп&amp;равка монет</translation>
     </message>
     <message>
@@ -346,7 +346,7 @@ Copyright © 2012-2015 The XP developers</source>
     </message>
     <message>
         <location filename="../bitcoingui.cpp" line="256"/>
-        <source>&amp;Receive coins</source>
+        <source>&amp;Receive XP</source>
         <translation>&amp;Получение монет</translation>
     </message>
     <message>
@@ -366,7 +366,7 @@ Copyright © 2012-2015 The XP developers</source>
     </message>
     <message>
         <location filename="../bitcoingui.cpp" line="268"/>
-        <source>&amp;Minting</source>
+        <source>&amp;XP Boost</source>
         <translation>&amp;PoS</translation>
     </message>
     <message>
@@ -2229,7 +2229,7 @@ Reduce the number of addresses involved in the address creation.</source>
     </message>
     <message>
         <location filename="../forms/overviewpage.ui" line="39"/>
-        <source>Balances</source>
+        <source>XP Bank</source>
         <translation>Балансы</translation>
     </message>
     <message>
@@ -2780,7 +2780,7 @@ Reduce the number of addresses involved in the address creation.</source>
         <location filename="../sendcoinsdialog.cpp" line="225"/>
         <location filename="../sendcoinsdialog.cpp" line="230"/>
         <location filename="../sendcoinsdialog.cpp" line="235"/>
-        <source>Send Coins</source>
+        <source>Send XP</source>
         <translation>Отправка</translation>
     </message>
     <message>
@@ -2978,7 +2978,7 @@ Reduce the number of addresses involved in the address creation.</source>
     </message>
     <message>
         <location filename="../sendcoinsdialog.cpp" line="175"/>
-        <source>Confirm send coins</source>
+        <source>Confirm send XP</source>
         <translation>Подтвердите отправку монет</translation>
     </message>
     <message>
