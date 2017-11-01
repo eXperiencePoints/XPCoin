@@ -36,7 +36,7 @@
              </font>
             </property>
             <property name="text">
-             <string>Balances</string>
+             <string>XP Bank</string>
             </property>
            </widget>
           </item>
@@ -343,6 +343,9 @@
     <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
       <widget class="QFrame" name="frame_2">
+       <property name="styleSheet">
+        <string notr="true">#frame_2 { border-image: url(:/images/tx_back); padding-bottom: 10px; }</string>
+       </property>
        <property name="frameShape">
         <enum>QFrame::StyledPanel</enum>
        </property>
