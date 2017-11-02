@@ -19,12 +19,12 @@
 Copyright © 2011-2012 The PPCoin Developers
 Copyright © 2014 The Peerunity Developers
 Copyright © 2014 The EmerCoin Developers
-Copyright © 2012-2015 The XP developers</source>
+Copyright © 2012-2018 The XP developers</source>
         <translation>Все права защищены © 2009-2015 Разработчики Bitcoin
 Все права защищены © 2011-2012 Разработчики PPCoin
 Все права защищены © 2014 Разработчики Peerunity
 Все права защищены © 2014 Разработчики EmerCoin
-Все права защищены © 2012-2015 Разработчики XP</translation>
+Все права защищены © 2012-2018 Разработчики XP</translation>
     </message>
     <message>
         <location filename="../forms/aboutdialog.ui" line="114"/>
