@@ -1,6 +1,6 @@
-XP 0.4.4 BETA
+XP 1.0.1
 
-Copyright (c) 2013 XP Developers
+Copyright (c) 2013-2018 XP Developers
 Copyright (c) 2011-2013 PPCoin Developers
 Distributed under the MIT/X11 software license, see the accompanying
 file license.txt or http://www.opensource.org/licenses/mit-license.php.

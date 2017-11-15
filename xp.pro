@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET = XP-qt
-VERSION = 0.7.5
+VERSION = 1.0.1
 INCLUDEPATH += src src/json src/qt
 QT += core gui network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
