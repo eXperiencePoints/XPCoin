@@ -1186,7 +1186,15 @@ void createConf()
             + "\n#(0=off, 1=on) server - accept command line and JSON-RPC commands"
             + "\nserver=0"
             + "\nrpcallowip=127.0.0.1"
-            + "\ntestnet=0";
+            + "\ntestnet=0"
+            + "\naddnode=79.98.29.42:28192"
+            + "\naddnode=195.181.244.29:28192"
+            + "\naddnode=185.223.30.231:28192"
+            + "\naddnode=193.125.210.62:28192"
+            + "\naddnode=154.127.52.105:28192"
+            + "\naddnode=68.69.205.1:28192"
+            + "\naddnode=212.85.91.97:28192";
+    
     pConf.close();
 }
 
