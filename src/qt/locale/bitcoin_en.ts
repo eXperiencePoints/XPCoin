@@ -2140,8 +2140,8 @@ Reduce the number of addresses involved in the address creation.</translation>
     <message>
         <location filename="../forms/optionsdialog.ui" line="469"/>
         <location filename="../forms/optionsdialog.ui" line="482"/>
-        <source>Third party URLs (e.g. explorer.novaco.in) that appear in the transactions tab as context menu items. %s in the URL is replaced by transaction hash. Multiple URLs are separated by vertical bar |.</source>
-        <translation>Third party URLs (e.g. explorer.novaco.in) that appear in the transactions tab as context menu items. %s in the URL is replaced by transaction hash. Multiple URLs are separated by vertical bar |.</translation>
+        <source>Third party URLs (e.g. chainz.cryptoid.info/xp) that appear in the transactions tab as context menu items. %s in the URL is replaced by transaction hash. Multiple URLs are separated by vertical bar |.</source>
+        <translation>Third party URLs (e.g. chainz.cryptoid.info/xp) that appear in the transactions tab as context menu items. %s in the URL is replaced by transaction hash. Multiple URLs are separated by vertical bar |.</translation>
     </message>
     <message>
         <location filename="../forms/optionsdialog.ui" line="472"/>

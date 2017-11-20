@@ -17,7 +17,7 @@ Build-Depends: debhelper,
  libqt4-dev,
  libqrencode-dev
 Standards-Version: 3.9.2
-Homepage: http://www.novaco.in/
+Homepage: https://www.xpcoin.io
 Vcs-Git: git://github.com/XP-project/XP.git
 Vcs-Browser: http://github.com/XP-project/XP
 
