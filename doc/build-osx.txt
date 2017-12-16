@@ -67,8 +67,8 @@ After exiting, you'll get a warning that the install is keg-only, which means it
 
 1. Clone the github tree to get the source code and go into the directory.
 
-        git clone https://github.com/XP-project/XP.git
-        cd XP
+        git clone https://github.com/eXperiencePoints/XPCoin.git
+        cd XPCoin
 
 2. Build XP-Qt application:
         qmake
