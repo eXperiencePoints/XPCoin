@@ -29,18 +29,7 @@ windows:LIBS += -lshlwapi
 LIBS += $$join(BOOST_LIB_PATH,,-L,) $$join(BDB_LIB_PATH,,-L,) $$join(OPENSSL_LIB_PATH,,-L,) $$join(QRENCODE_LIB_PATH,,-L,)
 LIBS += -lssl -lcrypto -ldb_cxx$$BDB_LIB_SUFFIX
 windows:LIBS += -lws2_32 -lole32 -loleaut32 -luuid -lgdi32
-LIBS += -lboost_system -lboost_filesystem -lboost_program_options -lboost_thread
-BOOST_LIB_SUFFIX=
-BOOST_INCLUDE_PATH=C:/deps/boost_1_53_0
-BOOST_LIB_PATH=C:/deps/boost_1_53_0/stage/lib
-BDB_INCLUDE_PATH=c:/deps/db-4.8.30.NC/build_unix
-BDB_LIB_PATH=c:/deps/db-4.8.30.NC/build_unix
-OPENSSL_INCLUDE_PATH=c:/deps/openssl-1.0.2d/include
-OPENSSL_LIB_PATH=c:/deps/openssl-1.0.2d
-MINIUPNPC_INCLUDE_PATH=C:/deps/
-MINIUPNPC_LIB_PATH=C:/deps/miniupnpc
-QRENCODE_INCLUDE_PATH=C:/deps/qrencode-3.4.4
-QRENCODE_LIB_PATH=C:/deps/qrencode-3.4.4/.libs
+windows:LIBS += -lboost_system-mgw46-mt-sd-1_53 -lboost_filesystem-mgw46-mt-sd-1_53 -lboost_program_options-mgw46-mt-sd-1_53 -lboost_thread-mgw46-mt-sd-1_53
 
 OBJECTS_DIR = build
 MOC_DIR = build
@@ -406,34 +395,61 @@ OTHER_FILES += \
 
 isEmpty(BOOST_THREAD_LIB_SUFFIX) {
     BOOST_THREAD_LIB_SUFFIX = $$BOOST_LIB_SUFFIX
+    macx:BOOST_THREAD_LIB_SUFFIX=-mt
 }
 
 isEmpty(BDB_LIB_PATH) {
-    macx:BDB_LIB_PATH = /usr/local/BerkeleyDB.6.1/lib
+    macx:BDB_LIB_PATH=/usr/local/opt/berkeley-db@4/lib
+    windows:BDB_LIB_PATH=c:/deps/db-4.8.30.NC/build_unix
 }
 
 isEmpty(OPENSSL_LIB_PATH) {
-    macx:OPENSSL_LIB_PATH = /usr/local/ssl/lib
+    macx:OPENSSL_LIB_PATH = /usr/local/opt/openssl/lib
+    windows:OPENSSL_LIB_PATH=c:/deps/openssl-1.0.2d
 }
 
 isEmpty(BDB_LIB_SUFFIX) {
-    macx:BDB_LIB_SUFFIX = -6.1
+    macx:BDB_LIB_SUFFIX = -4.8
 }
 
 isEmpty(BDB_INCLUDE_PATH) {
-    macx:BDB_INCLUDE_PATH = /usr/local/BerkeleyDB.6.1/include
+    macx:BDB_INCLUDE_PATH=/usr/local/opt/berkeley-db@4/include
+    windows:BDB_INCLUDE_PATH=c:/deps/db-4.8.30.NC/build_unix
 }
 
 isEmpty(OPENSSL_INCLUDE_PATH) {
-    macx:OPENSSL_INCLUDE_PATH = /usr/local/ssl/include
+    macx:OPENSSL_INCLUDE_PATH=/usr/local/opt/openssl/include
+    windows:OPENSSL_INCLUDE_PATH=c:/deps/openssl-1.0.2d/include
 }
 
 isEmpty(BOOST_LIB_PATH) {
-    macx:BOOST_LIB_PATH = /usr/local/lib
+    macx:BOOST_LIB_PATH=/usr/local/opt/boost/lib
+    windows:BOOST_LIB_PATH=C:/deps/boost_1_53_0/stage/lib
 }
 
 isEmpty(BOOST_INCLUDE_PATH) {
-    macx:BOOST_INCLUDE_PATH = /usr/local/include
+    macx:BOOST_INCLUDE_PATH=/usr/local/opt/boost/include
+    windows:BOOST_INCLUDE_PATH=C:/deps/boost_1_53_0
+}
+
+isEmpty(MINIUPNPC_INCLUDE_PATH) {
+    macx:MINIUPNPC_INCLUDE_PATH=/usr/local/opt/miniupnpc/include
+    windows:MINIUPNPC_INCLUDE_PATH=C:/deps/
+}
+
+isEmpty(MINIUPNPC_LIB_PATH) {
+    macx:MINIUPNPC_LIB_PATH=/usr/local/opt/miniupnpc/lib
+    windows:MINIUPNPC_LIB_PATH=C:/deps/miniupnpc
+}
+
+isEmpty(QRENCODE_INCLUDE_PATH) {
+    macx:QRENCODE_INCLUDE_PATH=/usr/local/opt/qrencode/include
+    widnwos:QRENCODE_INCLUDE_PATH=C:/deps/qrencode-3.4.4
+}
+
+isEmpty(QRENCODE_LIB_PATH) {
+    macx:QRENCODE_LIB_PATH=/usr/local/opt/qrencode/lib
+    windows:QRENCODE_LIB_PATH=C:/deps/qrencode-3.4.4/.libs
 }
 
 windows:DEFINES += WIN32
@@ -463,9 +479,9 @@ macx:LIBS += -framework Foundation -framework ApplicationServices -framework App
 macx:DEFINES += MAC_OSX MSG_NOSIGNAL=0
 macx:ICON = src/qt/res/icons/bitcoin.icns
 macx:TARGET = "XP-Qt"
-macx:QMAKE_CFLAGS_THREAD += -pthread
-macx:QMAKE_LFLAGS_THREAD += -pthread
-macx:QMAKE_CXXFLAGS_THREAD += -pthread
+macx:QMAKE_CFLAGS_THREAD += -lpthread
+macx:QMAKE_LFLAGS_THREAD += -lpthread
+macx:QMAKE_CXXFLAGS_THREAD += -lpthread
 
 # Set libraries and includes at end, to use platform-defined defaults if not overridden
 INCLUDEPATH += $$BOOST_INCLUDE_PATH $$BDB_INCLUDE_PATH $$OPENSSL_INCLUDE_PATH $$QRENCODE_INCLUDE_PATH
