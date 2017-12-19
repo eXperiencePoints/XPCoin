@@ -6,7 +6,7 @@
 # Mac OS X makefile for bitcoin
 # Originally by Laszlo Hanyecz (solar@heliacal.net)
 
-CXX=llvm-g++
+CXX=clang++
 DEPSDIR=/usr/local/opt
 
 # below default values is `brew --prefix xxx` result.
