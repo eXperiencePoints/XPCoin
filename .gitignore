@@ -47,7 +47,7 @@ Temporary Items
 .apdisk
 
 # XPd
-src/Xpd
+src/XPd
 
 # XP-Qt
 .qmake.stash
