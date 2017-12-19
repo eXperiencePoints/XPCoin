@@ -7,33 +7,79 @@
 # Originally by Laszlo Hanyecz (solar@heliacal.net)
 
 CXX=llvm-g++
-DEPSDIR=/opt/local
+DEPSDIR=/usr/local/opt
+
+# below default values is `brew --prefix xxx` result.
+ifeq ($(BOOST_INCLUDE_PATH),)
+BOOST_INCLUDE_PATH := "$(DEPSDIR)/boost/include"
+endif
+ifeq ($(BOOST_LIB_PATH),)
+BOOST_LIB_PATH := "$(DEPSDIR)/boost/lib"
+endif
+ifeq ($(BDB_INCLUDE_PATH),)
+BDB_INCLUDE_PATH := "$(DEPSDIR)/berkeley-db@4/include"
+endif
+ifeq ($(BDB_LIB_PATH),)
+BDB_LIB_PATH := "$(DEPSDIR)/berkeley-db@4/lib"
+endif
+ifeq ($(OPENSSL_INCLUDE_PATH),)
+OPENSSL_INCLUDE_PATH := "$(DEPSDIR)/openssl/include"
+endif
+ifeq ($(OPENSSL_LIB_PATH),)
+OPENSSL_LIB_PATH := "$(DEPSDIR)/openssl/lib"
+endif
+ifeq ($(MINIUPNPC_INCLUDE_PATH),)
+# todo
+MINIUPNPC_INCLUDE_PATH := "$(DEPSDIR)/miniupnpc/include"
+endif
+ifeq ($(MINIUPNPC_LIB_PATH),)
+# todo
+MINIUPNPC_LIB_PATH := "$(DEPSDIR)/miniupnpc/lib"
+endif
+ifeq ($(QRENCODE_INCLUDE_PATH),)
+# todo
+QRENCODE_INCLUDE_PATH := "$(DEPSDIR)/qrencode/include"
+endif
+ifeq ($(QRENCODE_LIB_PATH),)
+# todo
+QRENCODE_LIB_PATH := "$(DEPSDIR)/qrencode/lib"
+endif
 
 INCLUDEPATHS= \
  -I"$(CURDIR)" \
  -I"$(CURDIR)"/obj \
- -I"$(DEPSDIR)/include" \
- -I"$(DEPSDIR)/include/db48"
+ -I"$(BOOST_INCLUDE_PATH)" \
+ -I"$(BDB_INCLUDE_PATH)" \
+ -I"$(OPENSSL_INCLUDE_PATH)" \
+ -I"$(MINIUPNPC_INCLUDE_PATH)" \
+ -I"$(QRENCODE_INCLUDE_PATH)" \
 
 LIBPATHS= \
- -L"$(DEPSDIR)/lib" \
- -L"$(DEPSDIR)/lib/db48"
+ -L"$(BOOST_LIB_PATH)" \
+ -L"$(BDB_LIB_PATH)" \
+ -L"$(OPENSSL_LIB_PATH)" \
+ -L"$(MINIUPNPC_LIB_PATH)" \
+ -L"$(QRENCODE_LIB_PATH)"
 
+ifeq ($(USE_LEVELDB),)
 USE_LEVELDB:=0
+endif
+ifeq ($(USE_IPV6),)
 USE_IPV6:=1
+endif
 
 LIBS= -dead_strip
 
 ifdef STATIC
 # Build STATIC if you are redistributing the bitcoind binary
 LIBS += \
- $(DEPSDIR)/lib/db48/libdb_cxx-4.8.a \
- $(DEPSDIR)/lib/libboost_system-mt.a \
- $(DEPSDIR)/lib/libboost_filesystem-mt.a \
- $(DEPSDIR)/lib/libboost_program_options-mt.a \
- $(DEPSDIR)/lib/libboost_thread-mt.a \
- $(DEPSDIR)/lib/libssl.a \
- $(DEPSDIR)/lib/libcrypto.a \
+ $(BDB_LIB_PATH)/libdb_cxx-4.8.a
+ $(BOOST_LIB_PATH)/libboost_system-mt.a \
+ $(BOOST_LIB_PATH)/libboost_filesystem-mt.a \
+ $(BOOST_LIB_PATH)/libboost_program_options-mt.a \
+ $(BOOST_LIB_PATH)/libboost_thread-mt.a \
+ $(OPENSSL_LIB_PATH)/libssl.a \
+ $(OPENSSL_LIB_PATH)/libcrypto.a \
  -lz
 else
 LIBS += \
@@ -107,7 +153,7 @@ all: XPd
 #
 # LevelDB support
 #
-ifdef USE_LEVELDB
+ifeq ($(USE_LEVELDB), 1)
 LIBS += $(CURDIR)/leveldb/libleveldb.a $(CURDIR)/leveldb/libmemenv.a
 DEFS += $(addprefix -I,$(CURDIR)/leveldb/include) -DUSE_LEVELDB
 DEFS += $(addprefix -I,$(CURDIR)/leveldb/helpers)
