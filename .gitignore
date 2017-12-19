@@ -45,3 +45,10 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# XP-Qt
+.qmake.stash
+Makefile
+XP-Qt.app/
+build/
+qrc_bitcoin.cpp
