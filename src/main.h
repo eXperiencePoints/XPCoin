@@ -58,6 +58,9 @@ static const uint256 hashGenesisBlockTestNet("0x000c763e402f2436da9ed36c7286f62c
 
 inline int64_t PastDrift(int64_t nTime)   { return nTime - ((0.5 * 3 + 10) * 60); } // up to this from the past
 inline int64_t FutureDrift(int64_t nTime) { return nTime + 5 * 60; } // up to 5 mins from the future
+inline int64_t NextTargetSpacing(uint32_t nTime) { return nTime > FORK1_TIME ? 60 : 0.5 * 60; }
+inline int64_t NextTargetTimespan(uint32_t nTime) { return nTime > FORK1_TIME ? 15 * 60 : 0.5 * 15 * 60; }
+inline int StakeTargetSpacing(uint32_t nTime) { return nTime > FORK1_TIME ? 60 : 0.5 * 60; }
 
 extern CScript COINBASE_FLAGS;
 extern CCriticalSection cs_main;
