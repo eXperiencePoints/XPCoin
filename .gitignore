@@ -55,3 +55,4 @@ Makefile
 XP-Qt.app/
 build/
 qrc_bitcoin.cpp
+XP-qt
