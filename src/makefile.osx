@@ -62,7 +62,7 @@ LIBPATHS= \
  -L"$(QRENCODE_LIB_PATH)"
 
 ifeq ($(USE_LEVELDB),)
-USE_LEVELDB:=0
+USE_LEVELDB:=1
 endif
 ifeq ($(USE_IPV6),)
 USE_IPV6:=1
@@ -159,7 +159,7 @@ DEFS += $(addprefix -I,$(CURDIR)/leveldb/include) -DUSE_LEVELDB
 DEFS += $(addprefix -I,$(CURDIR)/leveldb/helpers)
 OBJS += obj/txdb-leveldb.o
 leveldb/libleveldb.a:
-	@echo "Building LevelDB ..."; cd leveldb; make; cd ..
+	@echo "Building LevelDB ..."; cd leveldb; make libleveldb.a libmemenv.a; cd ..
 obj/txdb-leveldb.o: leveldb/libleveldb.a
 else
 OBJS += obj/txdb-bdb.o
