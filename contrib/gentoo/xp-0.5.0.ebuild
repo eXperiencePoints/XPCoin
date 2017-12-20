@@ -7,7 +7,7 @@ inherit db-use eutils fdo-mime gnome2-utils kde4-functions qt4-r2
 DB_VER="4.8"
 
 DESCRIPTION="XP - a hybrid PoW+PoS energy efficient p2p-cryptocurrency and electronic payment system."
-HOMEPAGE="https://novaco.in/"
+HOMEPAGE="https://www.xpcoin.io"
 SRC_URI="https://github.com/${PN}-project/${PN}/archive/nvc-v${PV}.tar.gz -> ${PN}-${PV}.tar.gz"
 
 LICENSE="MIT"

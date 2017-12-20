@@ -45,7 +45,6 @@ CBigNum bnProofOfWorkLimitTestNet(~uint256(0) >> 16);
 unsigned int nStakeMinAge = 1 * 24 * nOneHour; // 1 days as zero time weight
 unsigned int nStakeMaxAge = 3 * 24 * nOneHour; // 3 days as full weight
 unsigned int nStakeTargetSpacing = 0.5 * 60; // 0.5-minute stakes spacing
-int64_t nTargetSpacing = 0.5 * 60;  // Same as the above
 unsigned int nModifierInterval = 1 * nOneHour; // time to elapse before new modifier is computed
 
 int nCoinbaseMaturity = 60;
@@ -1078,7 +1077,12 @@ int64_t GetProofOfWorkReward(unsigned int nBits, int64_t nFees, int nHeight)
 // miner's coin stake reward based on nBits and coin age spent (coin-days)
 int64_t GetProofOfStakeReward(int64_t nCoinAge, unsigned int nBits, int64_t nTime, bool bCoinYearOnly)
 {
-    int64_t nRewardCoinYear = 100 * CENT;
+    int64_t nRewardCoinYear;
+
+    if (nTime > FORK1_TIME)
+        nRewardCoinYear = 40 * CENT;
+    else
+        nRewardCoinYear = 100 * CENT;
 
     int64_t nSubsidy = nCoinAge * nRewardCoinYear / 365;
 
@@ -1088,12 +1092,13 @@ int64_t GetProofOfStakeReward(int64_t nCoinAge, unsigned int nBits, int64_t nTim
     return nSubsidy; // + nFees;
 }
 
-static const int64_t nTargetTimespan = 0.5 * 15 * 60;
-
 // Get proof of work blocks max spacing according to hard-coded conditions
 // Not in use right now!
 int64_t inline GetTargetSpacingWorkMax(int nHeight, unsigned int nTime)
 {
+    if(nTime > FORK1_TIME)
+        return StakeTargetSpacing(nHeight);
+
     if(nTime > TARGETS_SWITCH_TIME)
         return 3 * nStakeTargetSpacing; // 30 minutes on mainNet since 20 Jul 2013 00:00:00
 
@@ -1170,8 +1175,8 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
 		nActualSpacing = 1;
 	
 	// Limit the impact of blocks that are unusually far in the future
-	if (nActualSpacing > 3 * nTargetSpacing)
-		nActualSpacing = 3 * nTargetSpacing;
+        if (nActualSpacing > 3 * NextTargetSpacing(pindexLast->nTime))
+                nActualSpacing = 3 * NextTargetSpacing(pindexLast->nTime);
 	
     // ppcoin: target change every block
     // ppcoin: retarget with exponential moving toward target spacing
@@ -1179,9 +1184,9 @@ unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfS
     bnNew.SetCompact(pindexPrev->nBits);
 	// The below is intentionally commented out. We use the same time for POW and POS.
     // int64_t nTargetSpacing = fProofOfStake? nStakeTargetSpacing : min(GetTargetSpacingWorkMax(pindexLast->nHeight, pindexLast->nTime), (int64_t) nStakeTargetSpacing * (1 + pindexLast->nHeight - pindexPrev->nHeight));
-    int64_t nInterval = nTargetTimespan / nTargetSpacing;
-    bnNew *= ((nInterval - 1) * nTargetSpacing + nActualSpacing + nActualSpacing);
-    bnNew /= ((nInterval + 1) * nTargetSpacing);
+    int64_t nInterval = NextTargetTimespan(pindexLast->nTime) / NextTargetSpacing(pindexLast->nTime);
+    bnNew *= ((nInterval - 1) * NextTargetSpacing(pindexLast->nTime) + nActualSpacing + nActualSpacing);
+    bnNew /= ((nInterval + 1) * NextTargetSpacing(pindexLast->nTime));
 
     if (bnNew > bnTargetLimit)
         bnNew = bnTargetLimit;

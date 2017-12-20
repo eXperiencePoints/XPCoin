@@ -84,8 +84,8 @@ uint64_t KernelRecord::getCoinDay() const
     if( nWeight <  0)
         return 0;
     nWeight = min(nWeight, (int64_t)nStakeMaxAge);
-    uint64_t coinAge = (nValue * nWeight ) / (COIN * 86400);
-    return coinAge;
+    CBigNum bnCoinDay = (CBigNum(nValue) * nWeight) / CBigNum(COIN * 86400);
+    return bnCoinDay.getuint64();
 }
 
 int64_t KernelRecord::getPoSReward(int nBits, int minutes)
@@ -94,8 +94,8 @@ int64_t KernelRecord::getPoSReward(int nBits, int minutes)
     int64_t nWeight = GetAdjustedTime() - nTime + minutes * 60;
     if( nWeight <  nStakeMinAge)
         return 0;
-    uint64_t coinAge = (nValue * nWeight ) / (COIN * 86400);
-    PoSReward = GetProofOfStakeReward(coinAge, nBits, GetAdjustedTime() + minutes * 60);
+    CBigNum bnCoinDay = (CBigNum(nValue) * nWeight) / CBigNum(COIN * 86400);
+    PoSReward = GetProofOfStakeReward(bnCoinDay.getuint64(), nBits, GetAdjustedTime() + minutes * 60);
     return PoSReward;
 }
 
