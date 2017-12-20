@@ -1,4 +1,4 @@
-XP 1.0.1
+XP 1.0.2
 
 Copyright (c) 2013-2018 XP Developers
 Copyright (c) 2011-2013 PPCoin Developers
