@@ -90,4 +90,5 @@ for normal IPv4/IPv6 communication, use:
 Known addresses of XP nodes. please open a request to add your own nodes to this list
 
 wgehbgohin7yzmir.onion:28192
+
 onhgygezjmjtxhgy.onion:28192
