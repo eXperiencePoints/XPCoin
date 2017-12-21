@@ -50,7 +50,7 @@ config file):
 
 The directory can be different of course, but (both) port numbers should be equal to
 your XPd's P2P listen port (7777 by default, 17777 by default for testnet).
-Type sudo cat /var/lib/tor/ssh_hs/hostname on linux
+Type sudo cat /var/lib/tor/ssh_hs/hostname on linux to get your onion address
 
 	-externalip=X   You can tell XP about its publicly reachable address using
 	                this option, and this can be a .onion address. Given the above
