@@ -42,7 +42,7 @@ In a typical situation, this suffices to run behind a Tor proxy:
 
 If you configure your Tor system accordingly, it is possible to make your node also
 reachable from the Tor network. Add these lines to your /etc/tor/torrc (or equivalent
-config file):
+config file) and change socks to 9050:
 
 	HiddenServiceDir /var/lib/tor/ssh_hs/
 	HiddenServicePort 7777 127.0.0.1:7777
@@ -90,3 +90,4 @@ for normal IPv4/IPv6 communication, use:
 Known addresses of XP nodes. please open a request to add your own nodes to this list
 
 wgehbgohin7yzmir.onion:28192
+onhgygezjmjtxhgy.onion:28192
