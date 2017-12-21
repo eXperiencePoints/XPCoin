@@ -5,6 +5,7 @@ It is possible to run XP as a Tor hidden service, and connect to such services.
 
 The following directions assume you have a Tor proxy running on port 9050. Many distributions default to having a SOCKS proxy listening on port 9050, but others may not. In particular, the Tor Browser Bundle defaults to listening on a random port. See [Tor Project FAQ:TBBSocksPort](https://www.torproject.org/docs/faq.html.en#TBBSocksPort) for how to properly
 configure Tor.
+
 0. Setiing Up TOR relay.
 ---------------------------------
 Go to https://tor-relay.co/ follow the steps to install
