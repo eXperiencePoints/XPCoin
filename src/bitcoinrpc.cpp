@@ -1218,6 +1218,8 @@ Array RPCConvertValues(const std::string &strMethod, const std::vector<std::stri
     if (strMethod == "getblocktemplate"       && n > 0) ConvertTo<Object>(params[0]);
     if (strMethod == "listsinceblock"         && n > 1) ConvertTo<int64_t>(params[1]);
     if (strMethod == "listmintings"           && n > 0) ConvertTo<int64_t>(params[0]);
+    if (strMethod == "listmintings"           && n > 1) ConvertTo<int64_t>(params[1]);
+    if (strMethod == "listmintings"           && n > 2) ConvertTo<int64_t>(params[2]);
 
     if (strMethod == "scaninput"              && n > 0) ConvertTo<Object>(params[0]);
 
