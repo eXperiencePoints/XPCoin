@@ -317,6 +317,7 @@ static const CRPCCommand vRPCCommands[] =
     { "resendtx",               &resendtx,               false,  true},
     { "makekeypair",            &makekeypair,            false,  true},
     { "sendalert",              &sendalert,              false,  false},
+    { "listmintings"           ,&listmintings,           false,  false},
 };
 
 CRPCTable::CRPCTable()
@@ -1216,6 +1217,7 @@ Array RPCConvertValues(const std::string &strMethod, const std::vector<std::stri
     if (strMethod == "walletpassphrase"       && n > 2) ConvertTo<bool>(params[2]);
     if (strMethod == "getblocktemplate"       && n > 0) ConvertTo<Object>(params[0]);
     if (strMethod == "listsinceblock"         && n > 1) ConvertTo<int64_t>(params[1]);
+    if (strMethod == "listmintings"           && n > 0) ConvertTo<int64_t>(params[0]);
 
     if (strMethod == "scaninput"              && n > 0) ConvertTo<Object>(params[0]);
 

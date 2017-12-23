@@ -10,6 +10,7 @@
 #include "util.h"
 #include "ntp.h"
 #include "base58.h"
+#include "kernelrecord.h"
 
 using namespace json_spirit;
 using namespace std;
@@ -1854,4 +1855,60 @@ Value makekeypair(const Array& params, bool fHelp)
     result.push_back(Pair("PrivateKey", HexStr<CPrivKey::iterator>(vchPrivKey.begin(), vchPrivKey.end())));
     result.push_back(Pair("PublicKey", HexStr(key.GetPubKey().Raw())));
     return result;
+}
+
+
+static double getProbability(KernelRecord *wtx, int minutes)
+{
+    const CBlockIndex *p = GetLastBlockIndex(pindexBest, true);
+    double difficulty = GetDifficulty(p);
+
+    double prob = wtx->getProbToMintWithinNMinutes(difficulty, minutes);
+    prob = prob * 100;
+    return prob;
+}
+static Object getPoSReward(KernelRecord *wtx, int minutes)
+{
+    Object ret;
+    int nBits = GetLastBlockIndex(pindexBest, true)->nBits;
+    ret.push_back(Pair("from", ValueFromAmount(wtx->getPoSReward(nBits, 0))));
+    ret.push_back(Pair("to", ValueFromAmount(wtx->getPoSReward(nBits, minutes))));
+    return ret;
+}
+
+Value listmintings(const Array& params, bool fHelp)
+{
+    if (fHelp)
+        throw runtime_error(
+            "listmintings [minutes=1440]\n"
+            "Lists minting data");
+
+    int minutes = 1440;
+    if (params.size() > 0)
+        minutes = params[0].get_int();
+
+    Array txs;
+
+    {
+        LOCK(pwalletMain->cs_wallet);
+        for(std::map<uint256, CWalletTx>::iterator it = pwalletMain->mapWallet.begin(); it != pwalletMain->mapWallet.end(); ++it)
+        {
+            std::vector<KernelRecord> txList = KernelRecord::decomposeOutput(pwalletMain, it->second);
+            BOOST_FOREACH(KernelRecord& kr, txList) {
+                if(!kr.spent) {
+                    Object row;
+                    row.push_back(Pair("address", kr.address));
+                    row.push_back(Pair("txid", kr.hash.ToString()));
+                    row.push_back(Pair("balance", ValueFromAmount(kr.nValue)));
+                    row.push_back(Pair("age", kr.getAge()));
+                    row.push_back(Pair("coinday", kr.getCoinDay()));
+                    row.push_back(Pair("probability", getProbability(&kr, minutes)));
+                    row.push_back(Pair("reward", getPoSReward(&kr, minutes)));
+                    txs.push_back(row);
+                }
+            }
+        }
+    }
+
+    return txs;
 }
