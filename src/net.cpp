@@ -939,12 +939,10 @@ void ThreadSocketHandler2(void* parg)
 // The first name is used as information source for addrman.
 // The second name should resolve to a list of seed addresses.
 static const char *strDNSSeed[][2] = {
-    {"seed1.cryptolife.net", "seed1.cryptolife.net"},
-	{"seed2.cryptolife.net", "seed2.cryptolife.net"},
-	{"seed3.cryptolife.net", "seed3.cryptolife.net"},
-	{"electrum1.cryptolife.net", "electrum1.cryptolife.net"},
-    {"wallet.cryptolife.net", "wallet.cryptolife.net"},
-	{"explore.cryptolife.net", "explore.cryptolife.net"}
+    {"dnsseed.xpcoin.io", "dnsseed.xpcoin.io"},
+	{"dnsseed2.xpcoin.io", "dnsseed2.xpcoin.io"},
+	{"dnsseed3.xpcoin.io", "dnsseed3.xpcoin.io"},
+	{"dnsseed4.xpcoin.io", "dnsseed4.xpcoin.io"}
 };
 
 void ThreadDNSAddressSeed(void* parg)
@@ -1035,19 +1033,8 @@ uint32_t pnSeed[] =
 
 const char* pchTorSeed[] = 
 {
-    "seedp4knqnoei57u.onion",
-    "seedr3hhlepyi7fd.onion",
-    "seed3uuomkclbiz4.onion",
-    "seedeh7qck3ouff5.onion",
-    "5rg3vq4jagckeckf.onion",
-    "seedt3sraf53ajiy.onion",
-    "seedg4qyccsg42oq.onion",
-    "novaqrtoywpg7jly.onion",
-    "seed3d5wolqbgrcb.onion",
-    "seed24u5dwph3qw4.onion",
-    "mj26ulzbs2oskgym.onion",
-    "eqon4usunavt76m7.onion",
-    "seedd3aldwpslzl3.onion"
+    "wgehbgohin7yzmir.onion",
+    "onhgygezjmjtxhgy.onion"
 };
 
 void DumpAddresses()
