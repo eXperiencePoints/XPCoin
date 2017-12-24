@@ -1876,36 +1876,58 @@ static Object getPoSReward(KernelRecord *wtx, int minutes)
     return ret;
 }
 
+
 Value listmintings(const Array& params, bool fHelp)
 {
     if (fHelp)
         throw runtime_error(
-            "listmintings [minutes=1440]\n"
+            "listmintings [minutes=1440] [count=10] [from=0]\n"
             "Lists minting data");
 
     int minutes = 1440;
     if (params.size() > 0)
         minutes = params[0].get_int();
 
+    int nCount = 10;
+    if (params.size() > 1)
+        nCount = params[1].get_int();
+    int nFrom = 0;
+    if (params.size() > 2)
+        nFrom = params[2].get_int();
+
+    if (minutes < 0)
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Negative minutes");
+    if (nCount < 0)
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Negative count");
+    if (nFrom < 0)
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Negative from");
+
+
     Array txs;
+    int i = 0;
 
     {
         LOCK(pwalletMain->cs_wallet);
+
         for(std::map<uint256, CWalletTx>::iterator it = pwalletMain->mapWallet.begin(); it != pwalletMain->mapWallet.end(); ++it)
         {
             std::vector<KernelRecord> txList = KernelRecord::decomposeOutput(pwalletMain, it->second);
             BOOST_FOREACH(KernelRecord& kr, txList) {
-                if(!kr.spent) {
-                    Object row;
-                    row.push_back(Pair("address", kr.address));
-                    row.push_back(Pair("txid", kr.hash.ToString()));
-                    row.push_back(Pair("balance", ValueFromAmount(kr.nValue)));
-                    row.push_back(Pair("age", kr.getAge()));
-                    row.push_back(Pair("coinday", kr.getCoinDay()));
-                    row.push_back(Pair("probability", getProbability(&kr, minutes)));
-                    row.push_back(Pair("reward", getPoSReward(&kr, minutes)));
-                    txs.push_back(row);
-                }
+                if (i >= nFrom + nCount) break;
+                if (kr.spent) continue;
+
+                i++;
+                if (i <= nFrom) continue;
+
+                Object row;
+                row.push_back(Pair("address", kr.address));
+                row.push_back(Pair("txid", kr.hash.ToString()));
+                row.push_back(Pair("balance", ValueFromAmount(kr.nValue)));
+                row.push_back(Pair("age", kr.getAge()));
+                row.push_back(Pair("coinday", kr.getCoinDay()));
+                row.push_back(Pair("probability", getProbability(&kr, minutes)));
+                row.push_back(Pair("reward", getPoSReward(&kr, minutes)));
+                txs.push_back(row);
             }
         }
     }
