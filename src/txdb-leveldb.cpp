@@ -19,6 +19,7 @@
 #include "txdb.h"
 #include "util.h"
 #include "main.h"
+#include "ui_interface.h"
 
 using namespace std;
 using namespace boost;
@@ -349,6 +350,9 @@ bool CTxDB::LoadBlockIndex()
     CDataStream ssStartKey(SER_DISK, CLIENT_VERSION);
     ssStartKey << make_pair(string("blockindex"), uint256(0));
     iterator->Seek(ssStartKey.str());
+
+    uint32_t count = 0;
+    std::string msg;
     // Now read each entry.
     while (iterator->Valid())
     {
@@ -386,6 +390,13 @@ bool CTxDB::LoadBlockIndex()
         pindexNew->nTime          = diskindex.nTime;
         pindexNew->nBits          = diskindex.nBits;
         pindexNew->nNonce         = diskindex.nNonce;
+
+        count++;
+        if (count % 10000 == 0){
+            msg = _("Loading block index...");
+            printf("%s %" PRIu32 "\n", msg.c_str(), count);
+            uiInterface.InitMessage(strprintf("%s\n%" PRIu32, msg.c_str(), count));
+        }
 
         // Watch for genesis block
         if (pindexGenesisBlock == NULL && blockHash == (!fTestNet ? hashGenesisBlock : hashGenesisBlockTestNet))
