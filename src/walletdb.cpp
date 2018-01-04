@@ -896,6 +896,19 @@ bool ImportWallet(CWallet *pwallet, const string& strLocation)
 
 }
 
+bool RescanWallet(CWallet *pwallet)
+{
+
+   if (!pwallet->fFileBacked)
+       return false;
+   if (fShutdown)
+       return false;
+
+   pwallet->ScanForWalletTransactions(pindexGenesisBlock, true);
+   pwallet->ReacceptWalletTransactions();
+   return true;
+}
+
 
 //
 // Try to (very carefully!) recover wallet.dat if there is a problem.

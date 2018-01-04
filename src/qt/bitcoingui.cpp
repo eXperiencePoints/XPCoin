@@ -349,6 +349,10 @@ void BitcoinGUI::createActions()
     openRPCConsoleAction = new QAction(QIcon(":/icons/debugwindow"), tr("&Debug window"), this);
     openRPCConsoleAction->setStatusTip(tr("Open debugging and diagnostic console"));
 
+    rescanWalletAction = new QAction(tr("&Rescan Wallet..."), this);
+    rescanWalletAction->setStatusTip(tr("Rescan wallet for re-sync balance"));
+
+
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutClicked()));
     connect(aboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
@@ -365,6 +369,7 @@ void BitcoinGUI::createActions()
     connect(signMessageAction, SIGNAL(triggered()), this, SLOT(gotoSignMessageTab()));
     connect(verifyMessageAction, SIGNAL(triggered()), this, SLOT(gotoVerifyMessageTab()));
     connect(secondAuthAction, SIGNAL(triggered()), this, SLOT(gotoSecondAuthPage()));
+    connect(rescanWalletAction, SIGNAL(triggered()), this, SLOT(rescanWallet()));
 }
 
 void BitcoinGUI::createMenuBar()
@@ -388,6 +393,8 @@ void BitcoinGUI::createMenuBar()
     file->addAction(verifyMessageAction);
     file->addAction(secondAuthAction);
     file->addAction(multisigAction);
+    file->addSeparator();
+    file->addAction(rescanWalletAction);
     file->addSeparator();
     file->addAction(quitAction);
 
@@ -1183,6 +1190,24 @@ void BitcoinGUI::lockWallet()
         return;
 
     walletModel->setWalletLocked(true);
+}
+
+void BitcoinGUI::rescanWallet()
+{
+    QString strMessage = tr("Rescan wallet? "
+                            "It is necessary to wait for a while until rescan is completed.");
+    QMessageBox::StandardButton retval = QMessageBox::question(
+          this, tr("Confirm rescan wallet"), strMessage,
+          QMessageBox::Yes|QMessageBox::Cancel, QMessageBox::Yes);
+    if (retval != QMessageBox::Yes)
+      return;
+
+    if(!walletModel)
+        return;
+
+    if (!walletModel->rescanWallet()){
+        QMessageBox::warning(this, tr("Rescan Failed"), tr("Wallet cannot be opened."));
+    }
 }
 
 void BitcoinGUI::showNormalIfMinimized(bool fToggleHidden)

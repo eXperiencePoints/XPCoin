@@ -107,6 +107,7 @@ private:
     QAction *changePassphraseAction;
     QAction *aboutQtAction;
     QAction *openRPCConsoleAction;
+    QAction *rescanWalletAction;
 
     QSystemTrayIcon *trayIcon;
     Notificator *notificator;
@@ -211,6 +212,8 @@ private slots:
     void showNormalIfMinimized(bool fToggleHidden = false);
     /** simply calls showNormalIfMinimized(true) for use in SLOT() macro */
     void toggleHidden();
+
+    void rescanWallet();
 };
 
 #endif
