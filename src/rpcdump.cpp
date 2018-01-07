@@ -239,3 +239,16 @@ Value dumpwallet(const Array& params, bool fHelp)
 
     return Value::null;
 }
+
+
+Value rescanwallet(const Array& params, bool fHelp)
+{
+    if (fHelp)
+        throw runtime_error(
+            "rescanwallet\n"
+            "Rescan wallet for re-sync balance.");
+    if (!RescanWallet(pwalletMain))
+      throw JSONRPCError(RPC_WALLET_ERROR, "Wallet cannot be opened");
+
+    return Value::null;
+}
