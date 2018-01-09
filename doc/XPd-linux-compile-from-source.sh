@@ -43,7 +43,7 @@ echo "Downloading BootStrap"
 sudo apt install unzip -y -qq
 wget https://208.95.3.69/files/bootstrap-latest.zip --no-check-certificate
 echo "Unzipping Files"
-unzip ./xpcoin-server-bootstrap-latest.zip -d ~/.XP
+unzip ./bootstrap-latest.zip -d ~/.XP
 
 else
   echo "XP Compile Finished";
