@@ -1185,6 +1185,8 @@ void createConf()
             + "\ndaemon=0"
             + "\n#(0=off, 1=on) server - accept command line and JSON-RPC commands"
             + "\nserver=0"
+            + "\n#(0=irc, 1=no irc) irc - connect to irc to get peers"
+            + "\noirc=1"
             + "\nrpcallowip=127.0.0.1"
             + "\ntestnet=0"
             + "\naddnode=79.98.29.42:28192"
