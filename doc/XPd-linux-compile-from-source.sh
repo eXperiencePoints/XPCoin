@@ -41,7 +41,7 @@ if [ "$CONT" = "y" ]; then
 echo "Downloading BootStrap"
 
 sudo apt install unzip -y -qq
-wget https://208.95.3.69/files/bootstrap-latest.zip --no-check-certificate
+wget https://pool1.xpcoin.io/files/bootstrap-latest.zip --no-check-certificate
 echo "Unzipping Files"
 unzip ./bootstrap-latest.zip -d ~/.XP
 
