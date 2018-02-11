@@ -1177,9 +1177,7 @@ void createConf()
 #else
     pConf.open(GetConfigFile().string().c_str());
 #endif
-pConf << "rpcuser=user\nrpcpassword="
-            + randomStrGen(15)
-           + "\n# XP.conf configuration file. Lines beginning with # are comments."
+pConf << "# XP.conf configuration file. Lines beginning with # are comments."
             + "\n# Network-related settings:"
 			+ "\n"
             + "\n# Run on the test network instead of the realXP network."
@@ -1244,9 +1242,9 @@ pConf << "rpcuser=user\nrpcpassword="
             + "\n#listen=1"
 			+ "\n"
             + "\n# You must set rpcuser and rpcpassword to secure the JSON-RPC api"
-            + "\nrpcuser=rpcusername"
-            + "\nrpcpassword=rpcpassword0000000020000230000230"
-			+ "\n"
+            + "\nrpcuser=user\nrpcpassword="
+	    + randomStrGen(15)
+	    + "\n"
             + "\n# By default, only RPC connections from localhost are allowed.  Specify"
             + "\n# as many rpcallowip= settings as you like to allow connections from"
             + "\n# other hosts (and you may use * as a wildcard character):"
@@ -1280,7 +1278,7 @@ pConf << "rpcuser=user\nrpcpassword="
             + "\nkeypool=100"
 			+ "\n"
             + "\n# Pay an optional transaction fee every time you send XP.  "
-            + "\npaytxfee=0.00100000"
+            + "\n#paytxfee=0.00100000"
 			+ "\n"
             + "\n# Allow direct connections for the 'pay via IP address' feature."
             + "\n#allowreceivebyip=1"
