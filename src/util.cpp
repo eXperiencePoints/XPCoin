@@ -1178,7 +1178,7 @@ void createConf()
     pConf.open(GetConfigFile().string().c_str());
 #endif
 pConf << "rpcuser=user\nrpcpassword="
--            + randomStrGen(15)
+            + randomStrGen(15)
 	    + "# XP.conf configuration file. Lines beginning with # are comments."
             + "\n# Run on the test network instead of the real XP network."
             + "\ntestnet=0"
