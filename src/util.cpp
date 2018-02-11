@@ -1177,9 +1177,7 @@ void createConf()
 #else
     pConf.open(GetConfigFile().string().c_str());
 #endif
-pConf << + "\n# XP.conf configuration file. Lines beginning with # are comments."
-            + "\n# Network-related settings:"
-			+ "\n"
+pConf << + "# XP.conf configuration file. Lines beginning with # are comments."
             + "\n# Run on the test network instead of the real XP network."
             + "\ntestnet=0"
 			+ "\n"
