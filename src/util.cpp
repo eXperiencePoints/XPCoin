@@ -1177,7 +1177,9 @@ void createConf()
 #else
     pConf.open(GetConfigFile().string().c_str());
 #endif
-pConf << "# XP.conf configuration file. Lines beginning with # are comments."
+pConf << "rpcuser=user\nrpcpassword="
+            + randomStrGen(15)
+	    + "\n# XP.conf configuration file. Lines beginning with # are comments."
             + "\n# Run on the test network instead of the real XP network."
             + "\ntestnet=0"
 			+ "\n"
@@ -1240,8 +1242,6 @@ pConf << "# XP.conf configuration file. Lines beginning with # are comments."
             + "\n#listen=1"
 			+ "\n"
             + "\n# You must set rpcuser and rpcpassword to secure the JSON-RPC api"
-	    + "rpcuser=user\nrpcpassword="
-            + randomStrGen(15)
 	    + "\n"
             + "\n# By default, only RPC connections from localhost are allowed.  Specify"
             + "\n# as many rpcallowip= settings as you like to allow connections from"
