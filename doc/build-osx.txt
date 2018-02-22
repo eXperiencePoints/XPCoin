@@ -51,7 +51,7 @@ Instructions: Homebrew
         `brew --prefix qt`/bin/qmake
         make
 
-3. Build bitcoind:
+3. Build XPd:
         cd src
         make -f makefile.osx XPd
 
@@ -85,7 +85,7 @@ All dependencies should be compiled with these flags:
 
 Once dependencies are compiled, you can create the .dmg disk image:
 
-./contrib/macdeploy/macdeployqtplus XP-Qt.app -dmg -fancy ./contrib/macdeploy/fancy.plist
+        `brew --prefix qt`/bin/macdeployqt XP-Qt.app -dmg
 
 Running
 -------
