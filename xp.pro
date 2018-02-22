@@ -47,14 +47,6 @@ contains(RELEASE, 1) {
     }
 }
 
-isEmpty(USE_LEVELDB) {
-    USE_LEVELDB = 1
-}
-
-isEmpty(USE_IPV6) {
-    USE_IPV6 = 1
-}
-
 !win32 {
 # for extra security against potential buffer overflows: enable GCCs Stack Smashing Protection
 QMAKE_CXXFLAGS *= -fstack-protector-all --param ssp-buffer-size=1
