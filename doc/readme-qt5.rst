@@ -44,10 +44,12 @@ Mac OS X
 - Execute the following commands in a terminal to get the dependencies:
 
 ::
-    brew install autoconf automake libtool boost openssl pkg-config protobuf qt qrencode berkeley-db@4
 
+    brew install autoconf automake libtool boost openssl pkg-config protobuf qt qrencode berkeley-db@4
     `brew --prefix qt`/bin/qmake
     make
+    `brew --prefix qt`/bin/macdeployqt XP-Qt.app -dmg
+
 
 Build configuration options
 ============================
@@ -56,11 +58,11 @@ Berkeley DB transaction index
 LevelDB transaction index
 --------------------------
 
-To use Berkeley DB for transaction index, pass the following argument to qmake:
+To use LevelDB for transaction index, pass the following argument to qmake:
 
 ::
 
-    qmake "USE_LEVELDB=0"
+    qmake "USE_LEVELDB=1"
 
 No additional external dependencies are required. If you're running this on your current sources tree then don't forget to run
 
