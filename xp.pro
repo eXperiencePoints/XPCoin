@@ -40,11 +40,6 @@ contains(RELEASE, 1) {
     macx:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7
     macx:QMAKE_CFLAGS += -mmacosx-version-min=10.7
     macx:QMAKE_OBJECTIVE_CFLAGS += -mmacosx-version-min=10.7
-
-    !windows:!macx {
-        # Linux: static link
-        LIBS += -Wl,-Bstatic
-    }
 }
 
 !win32 {
