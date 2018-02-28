@@ -17,7 +17,7 @@ for Debian and Ubuntu  <= 16.04 :
 ::
 
     sudo add-apt-repository ppa:bitcoin/bitcoin -y
-    sudo apt-update
+    sudo apt-get update
     sudo apt-get install git build-essential libssl-dev libdb4.8-dev libdb4.8++-dev \
         libboost-all-dev libqrencode-dev libminiupnpc-dev qt5-default qttools5-dev-tools
 
