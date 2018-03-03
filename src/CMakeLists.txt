@@ -13,6 +13,7 @@ option(USE_IPV6    "use IPV6" YES)
 option(USE_LEVELDB "use leveldb" NO)
 option(USE_ASM     "use ASM" NO)
 option(USE_SSE2    "use SSE2" NO)
+option(ENABLE_STATIC "static link" NO)
 
 # ----------------------------------------------------------------------------
 # detect compiler and target platform architecture
@@ -82,30 +83,33 @@ endif()
 # library directories
 ## openssl
 if (DEFINED $ENV{OPENSSL_LIB_PATH})
-  link_directories($ENV{OPENSSL_LIB_PATH})
+  set(OPENSSL_LIB_PATH $ENV{OPENSSL_LIB_PATH})
 else()
   if(APPLE AND (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
-    link_directories(${DEPSDIR}/openssl/lib)
+    set(OPENSSL_LIB_PATH ${DEPSDIR}/openssl/lib)
   endif()
 endif()
+link_directories(${OPENSSL_LIB_PATH})
 
 ## boost
 if (DEFINED $ENV{BOOST_LIB_PATH})
-  link_directories($ENV{BOOST_LIB_PATH})
+  set(BOOST_LIB_PATH $ENV{BOOST_LIB_PATH})
 else()
   if(APPLE AND (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
-    link_directories(${DEPSDIR}/boost/lib)
+    set(BOOST_LIB_PATH ${DEPSDIR}/boost/lib)
   endif()
 endif()
+link_directories(${BOOST_LIB_PATH})
 
 ## berkeley db
 if (DEFINED $ENV{BDB_LIB_PATH})
-  link_directories($ENV{BDB_LIB_PATH})
+  set(BDB_LIB_PATH $ENV{BDB_LIB_PATH})
 else()
   if(APPLE AND (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
-    link_directories(${DEPSDIR}/berkeley-db@4/lib)
+    set(BDB_LIB_PATH ${DEPSDIR}/berkeley-db@4/lib)
   endif()
 endif()
+link_directories(${BDB_LIB_PATH})
 
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_CXX_STANDARD 11)
@@ -200,13 +204,33 @@ file(WRITE ${CMAKE_SOURCE_DIR}/build.h ${COMMITDATE_DEFINE})
 add_definitions(-DHAVE_BUILD_INFO)
 
 add_executable(XPd ${XPd_SRCS})
-target_link_libraries(XPd
-  db_cxx-4.8
-  boost_system-mt
-  boost_filesystem-mt
-  boost_program_options-mt
-  boost_thread-mt
-  ssl
-  crypto
-  z
-  )
+if(ENABLE_STATIC)
+  message(status hoge)
+  if (WIN32 OR MSVC)
+    set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
+  elseif (UNIX)
+    set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+  endif()
+
+  target_link_libraries(XPd
+   ${BDB_LIB_PATH}/libdb_cxx-4.8${CMAKE_FIND_LIBRARY_SUFFIXES}
+   ${BOOST_LIB_PATH}/libboost_system-mt${CMAKE_FIND_LIBRARY_SUFFIXES}
+   ${BOOST_LIB_PATH}/libboost_filesystem-mt${CMAKE_FIND_LIBRARY_SUFFIXES}
+   ${BOOST_LIB_PATH}/libboost_program_options-mt${CMAKE_FIND_LIBRARY_SUFFIXES}
+   ${BOOST_LIB_PATH}/libboost_thread-mt${CMAKE_FIND_LIBRARY_SUFFIXES}
+   ${OPENSSL_LIB_PATH}/libssl${CMAKE_FIND_LIBRARY_SUFFIXES}
+   ${OPENSSL_LIB_PATH}/libcrypto${CMAKE_FIND_LIBRARY_SUFFIXES}
+   z
+   )
+else()
+  target_link_libraries(XPd
+    db_cxx-4.8
+    boost_system-mt
+    boost_filesystem-mt
+    boost_program_options-mt
+    boost_thread-mt
+    ssl
+    crypto
+    z
+    )
+  endif()
