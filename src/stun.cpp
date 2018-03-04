@@ -35,6 +35,9 @@
 #include <string.h>
 #include <sys/types.h>
 #ifdef WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
 #include <winsock2.h>
 #else
 #include <sys/socket.h>
@@ -338,14 +341,14 @@ static int stun_send(int s, struct sockaddr_in *dst, struct stun_header *resp)
 }
 
 /* helper function to generate a random request id */
-static uint64_t randfiller = GetRand(std::numeric_limits<uint64_t>::max());
+static uint64_t randfiller = GetRand((std::numeric_limits<uint64_t>::max)());
 static void stun_req_id(struct stun_header *req)
 {
     const uint64_t *S_block = (const uint64_t *)StunSrvList;
-    req->id.id[0] = GetRandInt(std::numeric_limits<int32_t>::max());
-    req->id.id[1] = GetRandInt(std::numeric_limits<int32_t>::max());
-    req->id.id[2] = GetRandInt(std::numeric_limits<int32_t>::max());
-    req->id.id[3] = GetRandInt(std::numeric_limits<int32_t>::max());
+    req->id.id[0] = GetRandInt((std::numeric_limits<int32_t>::max)());
+    req->id.id[1] = GetRandInt((std::numeric_limits<int32_t>::max)());
+    req->id.id[2] = GetRandInt((std::numeric_limits<int32_t>::max)());
+    req->id.id[3] = GetRandInt((std::numeric_limits<int32_t>::max)());
 
     req->id.id[0] |= 0x55555555;
     req->id.id[1] &= 0x55555555;

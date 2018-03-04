@@ -234,7 +234,7 @@ public:
         nLastSendEmpty = GetTime();
         nTimeConnected = GetTime();
         nHeaderStart = -1;
-        nMessageStart = std::numeric_limits<uint32_t>::max();
+        nMessageStart = (std::numeric_limits<uint32_t>::max)();
         addr = addrIn;
         addrName = addrNameIn == "" ? addr.ToStringIPPort() : addrNameIn;
         nVersion = 0;
@@ -285,13 +285,13 @@ public:
 
     int GetRefCount()
     {
-        return std::max(nRefCount, 0) + (GetTime() < nReleaseTime ? 1 : 0);
+        return (std::max)(nRefCount, 0) + (GetTime() < nReleaseTime ? 1 : 0);
     }
 
     CNode* AddRef(int64_t nTimeout=0)
     {
         if (nTimeout != 0)
-            nReleaseTime = std::max(nReleaseTime, GetTime() + nTimeout);
+            nReleaseTime = (std::max)(nReleaseTime, GetTime() + nTimeout);
         else
             nRefCount++;
         return this;
@@ -348,11 +348,11 @@ public:
         int64_t nNow = (GetTime() - 1) * 1000000;
         static int64_t nLastTime;
         ++nLastTime;
-        nNow = std::max(nNow, nLastTime);
+        nNow = (std::max)(nNow, nLastTime);
         nLastTime = nNow;
 
         // Each retry is 2 minutes after the last
-        nRequestTime = std::max(nRequestTime + 2 * 60 * 1000000, nNow);
+        nRequestTime = (std::max)(nRequestTime + 2 * 60 * 1000000, nNow);
         mapAskFor.insert(std::make_pair(nRequestTime, inv));
     }
 
@@ -376,7 +376,7 @@ public:
             return;
         vSend.resize(nHeaderStart);
         nHeaderStart = -1;
-        nMessageStart = std::numeric_limits<uint32_t>::max();
+        nMessageStart = (std::numeric_limits<uint32_t>::max)();
         LEAVE_CRITICAL_SECTION(cs_vSend);
 
         if (fDebug)
@@ -411,7 +411,7 @@ public:
         }
 
         nHeaderStart = -1;
-        nMessageStart = std::numeric_limits<uint32_t>::max();
+        nMessageStart = (std::numeric_limits<uint32_t>::max)();
         LEAVE_CRITICAL_SECTION(cs_vSend);
     }
 

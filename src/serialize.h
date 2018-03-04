@@ -220,8 +220,8 @@ template<typename Stream> inline void Unserialize(Stream& s, bool& a, int, int=0
 inline unsigned int GetSizeOfCompactSize(uint64_t nSize)
 {
     if (nSize < 253)             return sizeof(unsigned char);
-    else if (nSize <= std::numeric_limits<unsigned short>::max()) return sizeof(unsigned char) + sizeof(unsigned short);
-    else if (nSize <= std::numeric_limits<unsigned int>::max())  return sizeof(unsigned char) + sizeof(unsigned int);
+    else if (nSize <= (std::numeric_limits<unsigned short>::max)()) return sizeof(unsigned char) + sizeof(unsigned short);
+    else if (nSize <= (std::numeric_limits<unsigned int>::max)())  return sizeof(unsigned char) + sizeof(unsigned int);
     else                         return sizeof(unsigned char) + sizeof(uint64_t);
 }
 
@@ -233,14 +233,14 @@ void WriteCompactSize(Stream& os, uint64_t nSize)
         unsigned char chSize = (unsigned char)nSize;
         WRITEDATA(os, chSize);
     }
-    else if (nSize <= std::numeric_limits<unsigned short>::max())
+    else if (nSize <= (std::numeric_limits<unsigned short>::max)())
     {
         unsigned char chSize = 253;
         unsigned short xSize = (unsigned short)nSize;
         WRITEDATA(os, chSize);
         WRITEDATA(os, xSize);
     }
-    else if (nSize <= std::numeric_limits<unsigned int>::max())
+    else if (nSize <= (std::numeric_limits<unsigned int>::max)())
     {
         unsigned char chSize = 254;
         unsigned int xSize = (unsigned int)nSize;
@@ -1331,7 +1331,7 @@ public:
     int nVersion;
 
     CBufferedFile(FILE *fileIn, uint64_t nBufSize, uint64_t nRewindIn, int nTypeIn, int nVersionIn) :
-        src(fileIn), nSrcPos(0), nReadPos(0), nReadLimit(std::numeric_limits<uint64_t>::max()), nRewind(nRewindIn), vchBuf(nBufSize, 0),
+        src(fileIn), nSrcPos(0), nReadPos(0), nReadLimit((std::numeric_limits<uint64_t>::max)()), nRewind(nRewindIn), vchBuf(nBufSize, 0),
         state(0), exceptmask(std::ios_base::badbit | std::ios_base::failbit), nType(nTypeIn), nVersion(nVersionIn) {
     }
 
@@ -1402,7 +1402,7 @@ public:
 
     // prevent reading beyond a certain position
     // no argument removes the limit
-    bool SetLimit(uint64_t nPos = std::numeric_limits<uint64_t>::max()) {
+    bool SetLimit(uint64_t nPos = (std::numeric_limits<uint64_t>::max)()) {
         if (nPos < nReadPos)
             return false;
         nReadLimit = nPos;
