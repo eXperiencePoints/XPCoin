@@ -11,9 +11,9 @@ set CURDIR=%~dp0
 :: b2 toolset=msvc link=static,shared threading=multi variant=debug,release address-model=64 || exit /b 1
 del /S/Q boost_1_66_0-bi-msvc-all-32-64.7z
 rmkdir /S/Q boost_1_66_0
-curl -O https://dl.bintray.com/boostorg/release/1.66.0/binaries/boost_1_66_0-bin-msvc-all-32-64.7z
+curl -OL https://dl.bintray.com/boostorg/release/1.66.0/binaries/boost_1_66_0-bin-msvc-all-32-64.7z
 7z x boost_1_66_0-bin-msvc-all-32-64.7z
-:: rmdir /S/Q %CURDIR%\lib\boost 
+:: rmdir /S/Q %CURDIR%\lib\boost
 :: mkdir %CURDIR%\lib\boost\lib
 :: xcopy /E/Q %CURDIR%\boost\stage\lib  %CURDIR%\lib\boost\lib
 :: mkdir %CURDIR%\lib\boost\include\boost
