@@ -13,7 +13,7 @@ option(USE_IPV6    "use IPV6" YES)
 option(USE_LEVELDB "use leveldb" NO)
 option(USE_ASM     "use ASM" NO)
 option(USE_SSE2    "use SSE2" NO)
-if(WIN32 OR MSVC)
+if(MSVC)
   set(DEFAULT_STATIC_OPTION YES)
 else()
   set(DEFAULT_STATIC_OPTION NO)
@@ -55,7 +55,7 @@ endif()
 if(APPLE AND (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
   set(DEPSDIR "/usr/local/opt") # homebrew prefix
 elseif(MSVC)
-  set(DEPSDIR "${CMAKE_SOURCE_DIR}/../MSVC/lib")
+  set(DEPSDIR "${CMAKE_SOURCE_DIR}/../MSVC")
 endif()
 
 # include directories
@@ -67,7 +67,7 @@ else()
   if(APPLE AND (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
     include_directories(${DEPSDIR}/openssl/include)
   elseif(MSVC)
-    include_directories(${DEPSDIR}/../openssl-1.0.2l-vs2017/include) # adhoc
+    include_directories(${DEPSDIR}/openssl-1.0.2l-vs2017/include)
   endif()
 endif()
 
@@ -78,7 +78,7 @@ else()
   if(APPLE AND (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
     include_directories(${DEPSDIR}/boost/include)
   elseif(MSVC)
-    include_directories(${DEPSDIR}/../boost_1_66_0) # adhoc
+    include_directories(${DEPSDIR}/boost_1_66_0)
   endif()
 endif()
 
@@ -89,7 +89,7 @@ else()
   if(APPLE AND (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
     include_directories(${DEPSDIR}/berkeley-db@4/include)
   elseif(MSVC)
-    include_directories(${DEPSDIR}/../db-4.8.30.NC/build_windows) # adhoc
+    include_directories(${DEPSDIR}/db-4.8.30.NC/build_windows)
   endif()
 endif()
 
@@ -101,10 +101,19 @@ else()
   if(APPLE AND (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
     set(OPENSSL_LIB_PATH ${DEPSDIR}/openssl/lib)
   elseif(MSVC)
-    set(OPENSSL_LIB_PATH ${DEPSDIR}/../openssl-1.0.2l-vs2017/lib)
+    set(OPENSSL_LIB_PATH ${DEPSDIR}/openssl-1.0.2l-vs2017/lib)
   endif()
 endif()
 link_directories(${OPENSSL_LIB_PATH})
+if(MSVC AND ENABLE_STATIC)
+  if(CMAKE_BUILD_TYPE matches Release)
+    set(OPENSSL_LIB_SUFFIX MT)
+  else()
+    set(OPENSSL_LIB_SUFFIX MTd)
+  endif()
+else()
+  # TODO: 
+endif()
 
 ## boost
 if (DEFINED $ENV{BOOST_LIB_PATH})
@@ -113,10 +122,28 @@ else()
   if(APPLE AND (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
     set(BOOST_LIB_PATH ${DEPSDIR}/boost/lib)
   else(MSVC)
-    set(BOOST_LIB_PATH ${DEPSDIR}/../boost_1_66_0/lib32-msvc-14.1) # adhoc & change 32bit
+    # TODO: change msvc version
+    if(WIN32)
+      set(BOOST_LIB_PATH ${DEPSDIR}/boost_1_66_0/lib32-msvc-14.1)
+      set(BOOST_LIB_ARCH x32)
+    else()
+      # don't consider ARM yet.
+      set(BOOST_LIB_PATH ${DEPSDIR}/boost_1_66_0/lib64-msvc-14.1)
+      set(BOOST_LIB_ARCH x64)
+    endif()
   endif()
 endif()
 link_directories(${BOOST_LIB_PATH})
+if(MSVC AND ENABLE_STATIC)
+  # TODO: change msvc version
+  if(CMAKE_BUILD_TYPE matches Release)
+    set(BOOST_LIB_SUFFIX vc141-mt-${BOOST_LIB_ARCH}-1_66)
+  else()
+    set(BOOST_LIB_SUFFIX vc141-mt-gd-${BOOST_LIB_ARCH}-1_66)
+  endif()
+else()
+  # TODO:
+endif()
 
 ## berkeley db
 if (DEFINED $ENV{BDB_LIB_PATH})
@@ -125,8 +152,16 @@ else()
   if(APPLE AND (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
     set(BDB_LIB_PATH ${DEPSDIR}/berkeley-db@4/lib)
   elseif(MSVC)
-    set(BDB_LIB_PATH ${DEPSDIR}/../db-4.8.30.NC/build_windows/Win32/Debug_static) # adhoc & change 32bit
-    set(BDB_LIB_PATH2 ${DEPSDIR}/../db-4.8.30.NC/build_windows/Win32/Debug) # adhoc & change 32bit
+    # TODO: 4.8.30 not support windows 64...
+    if(WIN32)
+      if(CMAKE_BUILD_TYPE mathes RELEASE)
+        set(BDB_LIB_PATH ${DEPSDIR}/../db-4.8.30.NC/build_windows/Win32/Release_static)
+        set(BDB_LIB_PATH2 ${DEPSDIR}/../db-4.8.30.NC/build_windows/Win32/Release)
+      else()
+        set(BDB_LIB_PATH ${DEPSDIR}/../db-4.8.30.NC/build_windows/Win32/Debug_static)
+        set(BDB_LIB_PATH2 ${DEPSDIR}/../db-4.8.30.NC/build_windows/Win32/Debug)
+      endif()
+    endif()
   endif()
 endif()
 link_directories(${BDB_LIB_PATH})
@@ -201,7 +236,7 @@ if(APPLE AND (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
   add_definitions(-DBOOST_SPIRIT_THREADSAFE)
   add_definitions(-D__STDC_FORMAT_MACROS)
   add_definitions(-D__STDC_LIMIT_MACROS)
-elseif(WIN32 AND MSVC)
+elseif((WIN32 OR WIN64) AND MSVC)
   add_definitions(/DWIN32)
   add_definitions(/D_WINDOWS)
   add_definitions(/DBOOST_THREAD_USE_LIB)
@@ -213,8 +248,10 @@ endif()
 if(MSVC)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
   set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
+  set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
 else()
-  set(CMAKE_C_FLAGS_DEBUG "-msse2 -msse3")
+  set(CMAKE_C_FLAGS "-msse2 -msse3")
   set(CMAKE_CXX_FLAGS "-msse2 -msse3")
 endif()
 
@@ -233,12 +270,16 @@ execute_process(
   OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 file(WRITE ${CMAKE_SOURCE_DIR}/build.h ${COMMITDATE_DEFINE})
-add_definitions(-DHAVE_BUILD_INFO)
+if(MSVC)
+  add_definitions(/DHAVE_BUILD_INFO)
+else()
+  add_definitions(-DHAVE_BUILD_INFO)
+endif()
 
 add_executable(XPd ${XPd_SRCS})
 if(ENABLE_STATIC)
   message(status hoge)
-  if (WIN32 OR MSVC)
+  if (MSVC)
     set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
   elseif (UNIX)
     set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
@@ -246,16 +287,15 @@ if(ENABLE_STATIC)
 
   if(MSVC)
     target_link_libraries(XPd
-   ${BDB_LIB_PATH}/libdb_stl48sd${CMAKE_FIND_LIBRARY_SUFFIXES}
-   ${BDB_LIB_PATH2}/libdb48d${CMAKE_FIND_LIBRARY_SUFFIXES}
-   ${BOOST_LIB_PATH}/libboost_system-vc141-mt-gd-x32-1_66${CMAKE_FIND_LIBRARY_SUFFIXES}
-   ${BOOST_LIB_PATH}/libboost_filesystem-vc141-mt-gd-x32-1_66${CMAKE_FIND_LIBRARY_SUFFIXES}
-   ${BOOST_LIB_PATH}/libboost_program_options-vc141-mt-gd-x32-1_66${CMAKE_FIND_LIBRARY_SUFFIXES}
-   ${BOOST_LIB_PATH}/libboost_thread-vc141-mt-gd-x32-1_66${CMAKE_FIND_LIBRARY_SUFFIXES}
-   ${OPENSSL_LIB_PATH}/ssleay32MT${CMAKE_FIND_LIBRARY_SUFFIXES}
-   ${OPENSSL_LIB_PATH}/libeay32MT${CMAKE_FIND_LIBRARY_SUFFIXES}
+     ${BDB_LIB_PATH}/libdb_stl48sd${CMAKE_FIND_LIBRARY_SUFFIXES}
+     ${BDB_LIB_PATH2}/libdb48d${CMAKE_FIND_LIBRARY_SUFFIXES}
+     ${BOOST_LIB_PATH}/libboost_system-${BOOST_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
+     ${BOOST_LIB_PATH}/libboost_filesystem-${BOOST_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
+     ${BOOST_LIB_PATH}/libboost_program_options-${BOOST_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
+     ${BOOST_LIB_PATH}/libboost_thread-${BOOST_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
+     ${OPENSSL_LIB_PATH}/ssleay32${OPENSSL_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
+     ${OPENSSL_LIB_PATH}/libeay32${OPENSSL_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
    )
-
   else()
     target_link_libraries(XPd
      ${BDB_LIB_PATH}/libdb_cxx-4.8${CMAKE_FIND_LIBRARY_SUFFIXES}
