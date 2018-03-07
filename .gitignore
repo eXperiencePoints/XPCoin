@@ -52,8 +52,11 @@ src/XPd
 # XP-Qt
 .qmake.stash
 Makefile
+Makefile.debug
+Makefile.release
 XP-Qt.app/
 build/
+release/
 qrc_bitcoin.cpp
 XP-qt
 output/
