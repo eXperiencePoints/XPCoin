@@ -3,6 +3,7 @@ setlocal
 
 choco install -y unzip || exit /b 1
 choco install -y 7zip || exit /b 1
+choco install -y jom || exit /b 1
 choco install -y git || exit /b 1
 choco install -y curl || exit /b 1
 choco install -y strawberryperl || exit /b 1
