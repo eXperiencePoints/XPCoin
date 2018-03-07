@@ -158,17 +158,25 @@ else()
   elseif(MSVC)
     # TODO: 4.8.30 not support windows 64...
     if(WIN32)
-      if(CMAKE_BUILD_TYPE MATCHES RELEASE)
-        set(BDB_LIB_PATH ${DEPSDIR}/db-4.8.30.NC/build_windows/Win32/Release_static)
-        set(BDB_LIB_PATH2 ${DEPSDIR}/db-4.8.30.NC/build_windows/Win32/Release)
+      if(CMAKE_BUILD_TYPE MATCHES Release)
+        set(BDB_LIB_PATH ${DEPSDIR}/db-4.8.30.NC/build_windows/Win32/Release)
       else()
-        set(BDB_LIB_PATH ${DEPSDIR}/db-4.8.30.NC/build_windows/Win32/Debug_static)
-        set(BDB_LIB_PATH2 ${DEPSDIR}/db-4.8.30.NC/build_windows/Win32/Debug)
+        set(BDB_LIB_PATH ${DEPSDIR}/db-4.8.30.NC/build_windows/Win32/Debug)
       endif()
     endif()
   endif()
 endif()
 link_directories(${BDB_LIB_PATH})
+if(MSVC AND ENABLE_STATIC)
+  if(CMAKE_BUILD_TYPE MATCHES Release)
+    set(BDB_LIB_SUFFIX "")
+  else()
+    set(BDB_LIB_SUFFIX d)
+  endif()
+else()
+  # TODO:
+endif()
+
 
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_CXX_STANDARD 11)
@@ -291,8 +299,8 @@ if(ENABLE_STATIC)
 
   if(MSVC)
     target_link_libraries(XPd
-     ${BDB_LIB_PATH}/libdb_stl48sd${CMAKE_FIND_LIBRARY_SUFFIXES}
-     ${BDB_LIB_PATH2}/libdb48d${CMAKE_FIND_LIBRARY_SUFFIXES}
+     ${BDB_LIB_PATH}/libdb_stl48${BDB_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
+     ${BDB_LIB_PATH}/libdb48${BDB_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
      ${BOOST_LIB_PATH}/libboost_system-${BOOST_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
      ${BOOST_LIB_PATH}/libboost_filesystem-${BOOST_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
      ${BOOST_LIB_PATH}/libboost_program_options-${BOOST_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
