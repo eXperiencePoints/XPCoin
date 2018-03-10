@@ -11,6 +11,7 @@ project(XPd CXX C)
 # ----------------------------------------------------------------------------
 option(USE_IPV6    "use IPV6" YES)
 option(USE_LEVELDB "use leveldb" NO)
+option(USE_UPNP    "use UPNP" NO)
 option(USE_ASM     "use ASM" NO)
 option(USE_SSE2    "use SSE2" NO)
 if(MSVC)
@@ -97,6 +98,19 @@ else()
   endif()
 endif()
 
+## upnp
+if(USE_UPNP)
+  if (DEFINED $ENV{MINIUPNPC_INCLUDE_PATH})
+    include_directories($ENV{MINIUPNPC_INCLUDE_PATH})
+  else()
+    if(APPLE AND (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
+      include_directories(${DEPSDIR}/miniupnpc/include)
+    elseif(MSVC)
+      # TODO:
+    endif()
+  endif()
+endif()
+
 # library directories
 ## openssl
 if (DEFINED $ENV{OPENSSL_LIB_PATH})
@@ -177,6 +191,19 @@ else()
   # TODO:
 endif()
 
+## upnp
+if(USE_UPNP)
+  if (DEFINED $ENV{MINIUPNPC_LIB_PATH})
+    set(OPENSSL_LIB_PATH $ENV{MINIUPNPC_LIB_PATH})
+  else()
+    if(APPLE AND (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
+      set(MINIUPNPC_LIB_PATH ${DEPSDIR}/miniupnpc/lib)
+    elseif(MSVC)
+      # TODO:
+    endif()
+  endif()
+  link_directories(${MINIUPNPC_LIB_PATH})
+endif()
 
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_CXX_STANDARD 11)
@@ -241,7 +268,26 @@ else()
   endif()
 endif()
 
-add_definitions(-DUSE_IPV6=${USE_IPV6})
+if(USE_UPNP)
+  if(MSVC)
+    add_definitions(/DUSE_UPNP=1)  
+  else()
+    add_definitions(-DUSE_UPNP=1)  
+  endif()
+endif()
+
+if(USE_IPV6)
+  set(USE_IPV6VAL 1)
+else()
+  set(USE_IPV6VAL 0)
+endif()
+
+if(MSVC)
+  add_definitions(/DUSE_IPV6=${USE_IPV6VAL})
+else()
+  add_definitions(-DUSE_IPV6=${USE_IPV6VAL})
+endif()
+
 if(APPLE AND (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
   add_definitions(-DMAC_OSX)
   add_definitions(-DMSG_NOSIGNAL=0)
@@ -319,7 +365,11 @@ if(ENABLE_STATIC)
      ${OPENSSL_LIB_PATH}/libcrypto${CMAKE_FIND_LIBRARY_SUFFIXES}
      z
    )
-
+  endif()
+  if(USE_UPNP)
+    target_link_libraries(XPd
+    ${MINIUPNPC_LIB_PATH}/libminiupnpc${CMAKE_FIND_LIBRARY_SUFFIXES}
+    )
   endif()
 else()
   target_link_libraries(XPd
@@ -332,4 +382,10 @@ else()
     crypto
     z
     )
+  if(USE_UPNP)
+    target_link_libraries(XPd
+    miniupnpc
+    )
   endif()
+endif()
+
