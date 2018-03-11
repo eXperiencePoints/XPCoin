@@ -61,6 +61,9 @@ LIBPATHS= \
  -L"$(MINIUPNPC_LIB_PATH)" \
  -L"$(QRENCODE_LIB_PATH)"
 
+ifeq ($(USE_UPNP),)
+USE_UPNP:=0
+endif
 ifeq ($(USE_LEVELDB),)
 USE_LEVELDB:=0
 endif
@@ -143,6 +146,18 @@ OBJS= \
     obj/kernel.o \
     obj/kernelrecord.o \
     obj/kernel_worker.o
+
+ifndef USE_UPNP
+	override USE_UPNP = -
+endif
+ifneq (${USE_UPNP}, -)
+	DEFS += -DUSE_UPNP=$(USE_UPNP)
+ifdef STATIC
+	LIBS += $(DEPSDIR)/lib/libminiupnpc.a
+else
+	LIBS += -lminiupnpc
+endif
+endif
 
 ifneq (${USE_IPV6}, -)
 	DEFS += -DUSE_IPV6=$(USE_IPV6)
