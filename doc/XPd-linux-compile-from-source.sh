@@ -35,6 +35,7 @@ cd src/
 make -f makefile.unix 
 
 chmod +x XPd
+strip XPd
 
 read -p "Would you like to download and unzip the blockchain?"  CONT
 if [ "$CONT" = "y" ]; then
