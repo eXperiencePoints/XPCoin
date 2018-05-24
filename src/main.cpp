@@ -1087,7 +1087,7 @@ int64_t GetProofOfStakeReward(int64_t nCoinAge, unsigned int nBits, int64_t nTim
     int64_t nSubsidy = nCoinAge * nRewardCoinYear / 365;
 
     if (fDebug && GetBoolArg("-printcreation"))
-        printf("GetProofOfStakeReward(): create=%s nCoinAge=%"PRId64"\n", FormatMoney(nSubsidy).c_str(), nCoinAge);
+        printf("GetProofOfStakeReward(): create=%s nCoinAge=%" PRId64 "\n", FormatMoney(nSubsidy).c_str(), nCoinAge);
 
     return nSubsidy; // + nFees;
 }
@@ -2760,7 +2760,7 @@ bool LoadBlockIndex(bool fAllowNew)
         block.nVersion = 1;
         block.nTime    = 1472006328;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
-        block.nNonce   = 261097; // !fTestNet ? 1575379 : 46534;
+        block.nNonce   = !fTestNet ? 261097 : 175602;
 		
 
         block.print();
