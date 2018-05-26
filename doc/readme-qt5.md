@@ -7,26 +7,24 @@ Build instructions
 Debian
 -------
 
-First, make sure that the required packages for Qt4 development of your
+First, make sure that the required packages for Qt5 development of your
 distribution are installed, these are
-
-::
 
 for Debian and Ubuntu  <= 16.04 :
 
-::
-
-    sudo add-apt-repository ppa:bitcoin/bitcoin -y
-    sudo apt-get update
-    sudo apt-get install git build-essential libssl-dev libdb4.8-dev libdb4.8++-dev \
-        libboost-all-dev libqrencode-dev libminiupnpc-dev qt5-default qttools5-dev-tools
+```bash
+sudo add-apt-repository ppa:bitcoin/bitcoin -y
+sudo apt-get update
+sudo apt-get install git build-essential libssl-dev libdb4.8-dev libdb4.8++-dev \
+    libboost-all-dev libqrencode-dev libminiupnpc-dev qt5-default qttools5-dev-tools
+```
 
 then execute the following:
 
-::
-
-    qmake
-    make
+```bash
+qmake
+make
+```
 
 Alternatively, install Qt Creator and open the `XP-qt.pro` file.
 
@@ -34,22 +32,51 @@ An executable named `XP-qt` will be built.
 
 
 Windows
---------
+-------
 
-T.B.D
+for Windows 10 over.
+
+setup follows software: 
+
+- Visual Studio 2017 Community
+- [chocolatey](https://chocolatey.org/)
+- Qt 5.10.1 & msvc 2015 32bit
+
+
+prepare XP-Qt dependency libraries:
+
+```bat
+MSVC\prepare.bat (execute by Admin permission.)
+MSVC\boost.bat
+MSVC\openssl.bat
+MSVC\berkeleydb.bat
+MSVC\qrencode.bat
+```
+
+build berkeley db by using MSVC\db-4.8.30.NC\build_windowsBerkeley_DB.sln by yourself.
+
+`XP-Qt` build:
+
+```bash
+call "C:\Program Files (x86)\Microsoft Visual　Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86
+cd \path\to\XPCoin
+C:\Qt\5.10.1\msvc2015\bin\qmake.exe -spec win32-msvc
+jom
+C:\Qt\5.10.1\msvc2015\bin\windeployqt --release release\XP-Qt.exe
+```
+
 
 Mac OS X
 --------
 
 - Execute the following commands in a terminal to get the dependencies:
 
-::
-
-    brew install autoconf automake libtool boost openssl pkg-config protobuf qt qrencode berkeley-db@4
-    `brew --prefix qt`/bin/qmake
-    make
-    `brew --prefix qt`/bin/macdeployqt XP-Qt.app -dmg
-
+```bash
+brew install autoconf automake libtool boost openssl pkg-config protobuf qt qrencode berkeley-db@4
+`brew --prefix qt`/bin/qmake
+make
+`brew --prefix qt`/bin/macdeployqt XP-Qt.app -dmg
+```
 
 Build configuration options
 ============================
@@ -60,15 +87,15 @@ LevelDB transaction index
 
 To use LevelDB for transaction index, pass the following argument to qmake:
 
-::
-
-    qmake "USE_LEVELDB=1"
+```bash
+qmake "USE_LEVELDB=1"
+```
 
 No additional external dependencies are required. If you're running this on your current sources tree then don't forget to run
 
-::
-
-    make distclean
+```bash
+make distclean
+```
 
 prior to running qmake.
 
@@ -77,17 +104,16 @@ Assembler implementation of scrypt hashing
 
 To use optimized scrypt implementation instead of generic scrypt module, pass the following argument to qmake:
 
-::
-
-    qmake "USE_ASM=1"
-
+```bash
+qmake "USE_ASM=1"
+```
 
 If you're using clang compiler then you need to unroll macroses before compiling. Following commands will do this for you:
 
-::
-
-    cd src/
-    ../contrib/clang/nomacro.pl
+```bash
+cd src/
+../contrib/clang/nomacro.pl
+```
 
 No additional external dependencies required. Note that only x86, x86_64 and ARM processors are supported.
 
@@ -97,9 +123,9 @@ Notification support for recent (k)ubuntu versions
 To see desktop notifications on (k)ubuntu versions starting from 10.04, enable usage of the
 FreeDesktop notification interface through DBUS using the following qmake option:
 
-::
-
-    qmake "USE_DBUS=1"
+```bash
+qmake "USE_DBUS=1"
+```
 
 Generation of QR codes
 -----------------------

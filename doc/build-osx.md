@@ -38,22 +38,35 @@ Instructions: Homebrew
 
 #### Install dependencies using Homebrew
 
-        brew install autoconf automake libtool boost openssl pkg-config protobuf qt qrencode berkeley-db@4
+```bash
+brew install autoconf automake libtool boost openssl pkg-config protobuf qt qrencode berkeley-db@4 cmake
+```
 
 ### Building `XPd`
 
 1. Clone the github tree to get the source code and go into the directory.
 
-        git clone https://github.com/eXperiencePoints/XPCoin.git
-        cd XPCoin
+```bash
+git clone https://github.com/eXperiencePoints/XPCoin.git
+cd XPCoin
+```
 
-2. Build XP-Qt application:
-        `brew --prefix qt`/bin/qmake
-        make
+2. Build XPd:
 
-3. Build XPd:
-        cd src
-        make -f makefile.osx XPd
+```bash
+cd src
+mkdir build
+cd build
+cmake ..
+cmake --build .
+```
+
+3. Build XP-Qt application: 
+
+```bash
+`brew --prefix qt`/bin/qmake
+make
+```
 
 Use Qt Creator as IDE
 ------------------------
@@ -77,15 +90,11 @@ XPd binary isn't included in the XP-Qt.app bundle.
 If you are building `XPd` or `XP-Qt` for others, your build machine should be set up
 as follows for maximum compatibility:
 
-All dependencies should be compiled with these flags:
-
- -mmacosx-version-min=10.7
- -arch x86_64
- -isysroot $(xcode-select --print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk
-
 Once dependencies are compiled, you can create the .dmg disk image:
 
-        `brew --prefix qt`/bin/macdeployqt XP-Qt.app -dmg
+```bash
+`brew --prefix qt`/bin/macdeployqt XP-Qt.app -dmg
+```
 
 Running
 -------
@@ -96,18 +105,24 @@ directory. We have to first create the RPC configuration file, though.
 Run `./XPd` to get the filename where it should be put, or just try these
 commands:
 
-    echo -e "rpcuser=XPrpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/XP/XP.conf"
-    chmod 600 "/Users/${USER}/Library/Application Support/XP/XP.conf"
+```bash
+echo -e "rpcuser=XPrpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/XP/XP.conf"
+chmod 600 "/Users/${USER}/Library/Application Support/XP/XP.conf"
+```
 
 The next time you run it, it will start downloading the blockchain, but it won't
 output anything while it's doing this. This process may take several hours;
 you can monitor its process by looking at the debug.log file, like this:
 
-    tail -f $HOME/Library/Application\ Support/XP/debug.log
+```bash
+tail -f $HOME/Library/Application\ Support/XP/debug.log
+```
 
 Other commands:
 -------
 
-    ./XPd -daemon # to start the bitcoin daemon.
-    ./XPd --help  # for a list of command-line options.
-    ./XPd help    # When the daemon is running, to get a list of RPC commands
+```bash
+./XPd -daemon # to start the bitcoin daemon.
+./XPd --help  # for a list of command-line options.
+./XPd help    # When the daemon is running, to get a list of RPC commands
+```
