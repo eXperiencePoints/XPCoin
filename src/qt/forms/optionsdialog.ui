@@ -121,6 +121,16 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_Network">
        <item>
+        <widget class="QCheckBox" name="mapPortUpnp">
+         <property name="toolTip">
+          <string>Automatically open the XPCoin client port on the router. This only works when your router supports UPnP and it is enabled.</string>
+         </property>
+         <property name="text">
+          <string>Map port using &amp;UPnP</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QCheckBox" name="connectSocks">
          <property name="toolTip">
           <string>Connect to the XP network through a SOCKS proxy (e.g. when connecting through Tor).</string>

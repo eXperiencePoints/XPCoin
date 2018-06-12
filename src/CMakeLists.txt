@@ -2,7 +2,7 @@
 # Root CMake file for simon and speck
 # ----------------------------------------------------------------------------
 
-cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 3.5)
 
 project(XPd CXX C)
 
@@ -11,6 +11,7 @@ project(XPd CXX C)
 # ----------------------------------------------------------------------------
 option(USE_IPV6    "use IPV6" YES)
 option(USE_LEVELDB "use leveldb" NO)
+option(USE_UPNP    "use UPNP" NO)
 option(USE_ASM     "use ASM" NO)
 option(USE_SSE2    "use SSE2" NO)
 if(MSVC)
@@ -97,6 +98,19 @@ else()
   endif()
 endif()
 
+## upnp
+if(USE_UPNP)
+  if (DEFINED $ENV{MINIUPNPC_INCLUDE_PATH})
+    include_directories($ENV{MINIUPNPC_INCLUDE_PATH})
+  else()
+    if(APPLE AND (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
+      include_directories(${DEPSDIR}/miniupnpc/include)
+    elseif(MSVC)
+      # TODO:
+    endif()
+  endif()
+endif()
+
 # library directories
 ## openssl
 if (DEFINED $ENV{OPENSSL_LIB_PATH})
@@ -109,14 +123,29 @@ else()
   endif()
 endif()
 link_directories(${OPENSSL_LIB_PATH})
-if(MSVC AND ENABLE_STATIC)
-  if(CMAKE_BUILD_TYPE MATCHES Release)
-    set(OPENSSL_LIB_SUFFIX MT)
+if(ENABLE_STATIC)
+  if(MSVC)
+    set(OPENSSL_SSL_LIB_NAME "ssleay32")
+    set(OPENSSL_CRYPTO_LIB_NAME "libeay32")
+
+    if(CMAKE_BUILD_TYPE MATCHES Release)
+      set(OPENSSL_LIB_SUFFIX MT)
+    else()
+      set(OPENSSL_LIB_SUFFIX MTd)
+    endif()
   else()
-    set(OPENSSL_LIB_SUFFIX MTd)
+    set(OPENSSL_SSL_LIB_NAME "libssl")
+    set(OPENSSL_CRYPTO_LIB_NAME "libcrypto")
+
+    # TODO:
   endif()
 else()
-  # TODO: 
+  if(MSVC)
+    # TODO:
+  else()
+    set(OPENSSL_SSL_LIB_NAME "ssl")
+    set(OPENSSL_CRYPTO_LIB_NAME "crypto")
+  endif()
 endif()
 
 ## boost
@@ -125,7 +154,7 @@ if (DEFINED $ENV{BOOST_LIB_PATH})
 else()
   if(APPLE AND (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
     set(BOOST_LIB_PATH ${DEPSDIR}/boost/lib)
-  else(MSVC)
+  elseif(MSVC)
     # TODO: change msvc version
     if(WIN32)
       set(BOOST_LIB_PATH ${DEPSDIR}/boost_1_66_0/lib32-msvc-14.1)
@@ -135,18 +164,33 @@ else()
       set(BOOST_LIB_PATH ${DEPSDIR}/boost_1_66_0/lib64-msvc-14.1)
       set(BOOST_LIB_ARCH x64)
     endif()
+  else()
+    # UNIX
+    # TODO:
   endif()
 endif()
 link_directories(${BOOST_LIB_PATH})
-if(MSVC AND ENABLE_STATIC)
-  # TODO: change msvc version
-  if(CMAKE_BUILD_TYPE MATCHES Release)
-    set(BOOST_LIB_SUFFIX vc141-mt-${BOOST_LIB_ARCH}-1_66)
+if(ENABLE_STATIC)
+  if(APPLE AND (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
+    set(BOOST_LIB_SUFFIX -mt)
+  elseif(MSVC)
+    # TODO: change msvc version
+    if(CMAKE_BUILD_TYPE MATCHES Release)
+      set(BOOST_LIB_SUFFIX -vc141-mt-${BOOST_LIB_ARCH}-1_66)
+    else()
+      set(BOOST_LIB_SUFFIX -vc141-mt-gd-${BOOST_LIB_ARCH}-1_66)
+    endif()
   else()
-    set(BOOST_LIB_SUFFIX vc141-mt-gd-${BOOST_LIB_ARCH}-1_66)
+    set(BOOST_LIB_SUFFIX "")
   endif()
 else()
-  # TODO:
+  if(APPLE AND (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
+    set(BOOST_LIB_SUFFIX -mt)
+  elseif(MSVC)
+    # TODO:
+  else()
+    set(BOOST_LIB_SUFFIX "")
+  endif()
 endif()
 
 ## berkeley db
@@ -164,19 +208,57 @@ else()
         set(BDB_LIB_PATH ${DEPSDIR}/db-4.8.30.NC/build_windows/Win32/Debug)
       endif()
     endif()
+  else()
+    # TODO:
   endif()
 endif()
 link_directories(${BDB_LIB_PATH})
-if(MSVC AND ENABLE_STATIC)
-  if(CMAKE_BUILD_TYPE MATCHES Release)
-    set(BDB_LIB_SUFFIX "")
+if(ENABLE_STATIC)
+  if(MSVC)
+    set(BDB_LIB_NAME "libdb_stl48")
+    if(CMAKE_BUILD_TYPE MATCHES Release)
+      set(BDB_LIB_SUFFIX "")
+    else()
+      set(BDB_LIB_SUFFIX d)
+    endif()
   else()
-    set(BDB_LIB_SUFFIX d)
+    set(BDB_LIB_NAME "libdb_cxx-4.8")
   endif()
 else()
-  # TODO:
+  if(MSVC)
+    set(BDB_LIB_NAME "db_stl-48")
+  else()
+    set(BDB_LIB_NAME "db_cxx-4.8")
+  endif()
 endif()
 
+## upnp
+if(USE_UPNP)
+  if (DEFINED $ENV{MINIUPNPC_LIB_PATH})
+    set(OPENSSL_LIB_PATH $ENV{MINIUPNPC_LIB_PATH})
+  else()
+    if(APPLE AND (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
+      set(MINIUPNPC_LIB_PATH ${DEPSDIR}/miniupnpc/lib)
+    elseif(MSVC)
+      # TODO:
+    endif()
+  endif()
+  link_directories(${MINIUPNPC_LIB_PATH})
+
+  if(ENABLE_STATIC)
+    if(MSVC)
+      # TODO:
+    else()
+      set(MINIUPNPC_LIB_NAME "libminiupnpc")
+    endif()
+  else()
+    if(MSVC)
+      # TODO:
+    else()
+      set(MINIUPNPC_LIB_NAME "miniupnpc")
+    endif()
+  endif()
+endif()
 
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_CXX_STANDARD 11)
@@ -241,7 +323,26 @@ else()
   endif()
 endif()
 
-add_definitions(-DUSE_IPV6=${USE_IPV6})
+if(USE_UPNP)
+  if(MSVC)
+    add_definitions(/DUSE_UPNP=1)  
+  else()
+    add_definitions(-DUSE_UPNP=1)  
+  endif()
+endif()
+
+if(USE_IPV6)
+  set(USE_IPV6VAL 1)
+else()
+  set(USE_IPV6VAL 0)
+endif()
+
+if(MSVC)
+  add_definitions(/DUSE_IPV6=${USE_IPV6VAL})
+else()
+  add_definitions(-DUSE_IPV6=${USE_IPV6VAL})
+endif()
+
 if(APPLE AND (${CMAKE_SYSTEM_NAME} MATCHES "Darwin"))
   add_definitions(-DMAC_OSX)
   add_definitions(-DMSG_NOSIGNAL=0)
@@ -297,39 +398,50 @@ if(ENABLE_STATIC)
     set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
   endif()
 
+  target_link_libraries(XPd
+    ${BDB_LIB_PATH}/${BDB_LIB_NAME}${BDB_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
+    ${BOOST_LIB_PATH}/libboost_system${BOOST_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
+    ${BOOST_LIB_PATH}/libboost_filesystem${BOOST_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
+    ${BOOST_LIB_PATH}/libboost_program_options${BOOST_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
+    ${BOOST_LIB_PATH}/libboost_thread${BOOST_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
+    ${OPENSSL_LIB_PATH}/${OPENSSL_SSL_LIB_NAME}${OPENSSL_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
+    ${OPENSSL_LIB_PATH}/${OPENSSL_CRYPTO_LIB_NAME}${OPENSSL_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
+  )
   if(MSVC)
     target_link_libraries(XPd
-     ${BDB_LIB_PATH}/libdb_stl48${BDB_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
      ${BDB_LIB_PATH}/libdb48${BDB_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
-     ${BOOST_LIB_PATH}/libboost_system-${BOOST_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
-     ${BOOST_LIB_PATH}/libboost_filesystem-${BOOST_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
-     ${BOOST_LIB_PATH}/libboost_program_options-${BOOST_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
-     ${BOOST_LIB_PATH}/libboost_thread-${BOOST_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
-     ${OPENSSL_LIB_PATH}/ssleay32${OPENSSL_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
-     ${OPENSSL_LIB_PATH}/libeay32${OPENSSL_LIB_SUFFIX}${CMAKE_FIND_LIBRARY_SUFFIXES}
-   )
+    )
   else()
     target_link_libraries(XPd
-     ${BDB_LIB_PATH}/libdb_cxx-4.8${CMAKE_FIND_LIBRARY_SUFFIXES}
-     ${BOOST_LIB_PATH}/libboost_system-mt${CMAKE_FIND_LIBRARY_SUFFIXES}
-     ${BOOST_LIB_PATH}/libboost_filesystem-mt${CMAKE_FIND_LIBRARY_SUFFIXES}
-     ${BOOST_LIB_PATH}/libboost_program_options-mt${CMAKE_FIND_LIBRARY_SUFFIXES}
-     ${BOOST_LIB_PATH}/libboost_thread-mt${CMAKE_FIND_LIBRARY_SUFFIXES}
-     ${OPENSSL_LIB_PATH}/libssl${CMAKE_FIND_LIBRARY_SUFFIXES}
-     ${OPENSSL_LIB_PATH}/libcrypto${CMAKE_FIND_LIBRARY_SUFFIXES}
-     z
-   )
+      z
+    )
+  endif()
 
+  if(USE_UPNP)
+    target_link_libraries(XPd
+    ${MINIUPNPC_LIB_PATH}/${MINIUPNPC_LIB_NAME}${CMAKE_FIND_LIBRARY_SUFFIXES}
+    )
   endif()
 else()
   target_link_libraries(XPd
-    db_cxx-4.8
-    boost_system-mt
-    boost_filesystem-mt
-    boost_program_options-mt
-    boost_thread-mt
-    ssl
-    crypto
+    ${BDB_LIB_NAME}
+    boost_system${BOOST_LIB_SUFFIX}
+    boost_filesystem${BOOST_LIB_SUFFIX}
+    boost_program_options${BOOST_LIB_SUFFIX}
+    boost_thread${BOOST_LIB_SUFFIX}
+    ${OPENSSL_SSL_LIB_NAME}
+    ${OPENSSL_CRYPTO_LIB_NAME}
+    )
+  if(NOT MSVC)
+    target_link_libraries(XPd
     z
+    pthread
     )
   endif()
+  if(USE_UPNP)
+    target_link_libraries(XPd
+    ${MINIUPNPC_LIB_NAME}
+    )
+  endif()
+endif()
+

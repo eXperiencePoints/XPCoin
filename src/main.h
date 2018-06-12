@@ -53,6 +53,12 @@ static const unsigned int LOCKTIME_THRESHOLD = 500000000; // Tue Nov  5 00:53:20
 // Maximum number of script-checking threads allowed
 static const int MAX_SCRIPTCHECK_THREADS = 16;
 
+#ifdef USE_UPNP
+static const int fHaveUPnP = true;
+#else
+static const int fHaveUPnP = false;
+#endif
+
 static const uint256 hashGenesisBlock("0x0000065a10945931644cdda436d5ad0742d085e9dee3e7fdd51b822626727e78");
 static const uint256 hashGenesisBlockTestNet("0x0000e097477b585e7289f4c23c4ff639a8775e8f4d2c715586f160fff8869278");
 
