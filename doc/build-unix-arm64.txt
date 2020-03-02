@@ -19,7 +19,7 @@ Linux arm  compile script (includes installing dependencies) (Non-GUI Version)(D
 
 tested working on Ubuntu Server 64bit
 
-wget https://github.com/eXperiencePoints/XPCoin/releases/download/1.0.0/XPd-linux-arm-compile-from-source.sh
+wget https://github.com/jack60612/XPCoin/blob/develop/doc/XPd-linux-arm-compile-from-source.sh?raw=true
 sudo sh ./XPd-linux-arm-compile-from-source.sh
 
 compiled file should be in XPCoin/src/ and is called XPd
