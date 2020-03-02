@@ -44,6 +44,7 @@ Dependencies
  libdb4.8    Berkeley DB       Blockchain & wallet storage
  libboost    Boost             C++ Library
  libqrencode QRCode generation Optional QRCode generation
+ gnueabiht    armhf compiler      adds gcc for armhf
 
 Note that libexecinfo should be installed, if you building under *BSD systems. 
 This library provides backtrace facility.
@@ -62,6 +63,7 @@ Versions used in this release:
  OpenSSL       0.9.8g
  Berkeley DB   4.8.30.NC
  Boost         1.37
+ gnueabihf     4:7.4.0-1
 
 Dependency Build Instructions: Ubuntu & Debian
 ----------------------------------------------
@@ -72,6 +74,7 @@ sudo apt-get install libdb4.8++-dev
  Boost 1.40+: sudo apt-get install libboost-all-dev
  or Boost 1.37: sudo apt-get install libboost1.37-dev
 sudo apt-get install libqrencode-dev
+sudo apt-get install gcc-arm-linux-gnueabihf
 
 If using Boost 1.37, append -mt to the boost libraries in the makefile.
 
